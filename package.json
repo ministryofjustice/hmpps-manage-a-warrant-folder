@@ -1,8 +1,8 @@
 {
-  "name": "hmpps-template-typescript",
+  "name": "hmpps-manage-a-warrant-folder",
   "version": "0.0.1",
-  "description": "HMPPS Typescript Template",
-  "repository": "git@github.com:ministryofjustice/hmpps-template-typescript.git",
+  "description": "Hmpps Manage A Warrant Folder",
+  "repository": "git@github.com:ministryofjustice/hmpps-manage-a-warrant-folder.git",
   "license": "MIT",
   "scripts": {
     "prepare": "husky install",
