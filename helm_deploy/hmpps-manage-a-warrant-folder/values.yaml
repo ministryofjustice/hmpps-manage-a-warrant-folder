@@ -11,8 +11,7 @@ generic-service:
 
   ingress:
     enabled: true
-    hosts:
-      - app-hostname.local    # override per environment
+    host: app-hostname.local    # override per environment
     tlsSecretName: hmpps-manage-a-warrant-folder-cert
 
   livenessProbe:
