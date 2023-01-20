@@ -1,0 +1,112 @@
+{% extends "../../partials/layout.njk" %}
+
+{% set pageTitle = applicationName + " - Home" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-xl">
+                <span class="govuk-caption-xl">Add custodial sentence information</span>
+                    Enter court details</h1>
+        </div>
+        <div class="govuk-grid-column-one-half">
+            <form class="form" method="post">
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+                <div class="govuk-form-group">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                        <h2 class="govuk-fieldset__heading">
+                                Court name
+                            </h2>
+                    </legend>
+                    <div id="search-hint" class="govuk-hint">
+                            Enter a court name, address, town or city.
+                        </div>
+                    <select id="court-name" class="enhance-autcomplete" name="court-name" type="text" aria-describedby="search-hint">
+                        {% for court in model.courts %}
+                            <option value="{{court.code}}">{{court.description}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="govuk-form-group">
+                    <fieldset class="govuk-fieldset">
+                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                            <h1 class="govuk-fieldset__heading">
+                                    Court date
+                                </h1>
+                        </legend>
+                        <div class="govuk-date-input" id="court-date">
+                            <div class="govuk-date-input__item">
+                                <div class="govuk-form-group">
+                                    <label class="govuk-label govuk-date-input__label" for="court-date-day">
+                                            Day
+                                        </label>
+                                    <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="court-date-day" name="court-date-day" type="text" pattern="[0-9]*" inputmode="numeric">
+                                </div>
+                            </div>
+                            <div class="govuk-date-input__item">
+                                <div class="govuk-form-group">
+                                    <label class="govuk-label govuk-date-input__label" for="court-date-month">
+                                            Month
+                                        </label>
+                                    <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="court-date-month" name="court-date-month" type="text" pattern="[0-9]*" inputmode="numeric">
+                                </div>
+                            </div>
+                            <div class="govuk-date-input__item">
+                                <div class="govuk-form-group">
+                                    <label class="govuk-label govuk-date-input__label" for="court-date-year">
+                                            Year
+                                        </label>
+                                    <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="court-date-year" name="court-date-year" type="text" pattern="[0-9]*" inputmode="numeric">
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="govuk-form-group govuk-!-margin-top-7">
+                    <h2 class="govuk-heading-m">Do you know the court case reference number?</h2>
+                    <!-- <p class="govuk-hint">This applies to offences that occur over multiple days.</p> -->
+                    <div class="govuk-radios" data-module="govuk-radios">
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="offence-end-date" name="offence-end-date" type="radio" value="offence-end-date" data-aria-controls="conditional-end-date">
+                            <label class="govuk-label govuk-radios__label" for="offence-end-date">
+                                    Yes
+                                </label>
+                        </div>
+                        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-end-date">
+                            <div class="govuk-form-group">
+                                <label class="govuk-heading-s" for="offence-end-date">
+                                        Court case reference number
+                                    </label>
+                                <p class="govuk-hint">For example, 'T20221234'</p>
+                                <input class="govuk-input govuk-!-width-one-half" id="court-case-reference" name="court-case-reference" type="text">
+                            </div>
+                        </div>
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="offence-end-date" name="offence-end-date" type="radio" value="offence-end-date">
+                            <label class="govuk-label govuk-radios__label" for="offence-end-date">
+                                    No
+                                </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="govuk-form-group">
+                    <fieldset class="govuk-fieldset">
+                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                                Hearing type
+                            </legend>
+                        <select class="govuk-select" id="hearing-type" name="hearing-type">
+                            {% for hearingType in model.hearingTypes %}
+                                <option value="{{hearingType.code}}">{{hearingType.description}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button id="court-details-button" class="govuk-button" data-module="govuk-button">
+                        Continue
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

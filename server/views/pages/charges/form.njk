@@ -1,0 +1,130 @@
+{% extends "../../partials/layout.njk" %}
+
+{% set pageTitle = applicationName + " - Home" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-xl">
+                <span class="govuk-caption-xl">Add custodial sentence information</span>
+                   Add offence</h1>
+        </div>
+        <div class="govuk-grid-column-one-half">
+            <form class="form" method="post">
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+                <div class="govuk-form-group">
+                    <label class="govuk-label govuk-label govuk-label--m" for="offence-name">
+                            Offence
+                        </label>
+                    <div id="offence-name-hint" class="govuk-hint">
+                            Search by offence code or name.
+                        </div>
+                    <select id="offence-picker" class="enhance-autcomplete" name="offence-name" type="text" aria-describedby="offence-name-hint">
+                        {% for offence in model.offences %}
+                            <option value="{{offence.code}}">{{offence.description}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="govuk-form-group">
+                    <label class="govuk-heading-m" for="sentence-date">
+                            Date of offence
+                        </label>
+                    <div class="govuk-date-input" id="offence-start-date">
+                        <div class="govuk-date-input__item">
+                            <div class="govuk-form-group">
+                                <label class="govuk-label govuk-date-input__label" for="offence-start-day">
+                                        Day
+                                    </label>
+                                <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="offence-start-day" name="offence-start-day" type="text" pattern="[0-9]*" inputmode="numeric">
+                            </div>
+                        </div>
+                        <div class="govuk-date-input__item">
+                            <div class="govuk-form-group">
+                                <label class="govuk-label govuk-date-input__label" for="offence-start-month">
+                                        Month
+                                    </label>
+                                <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="offence-start-month" name="offence-start-month" type="text" pattern="[0-9]*" inputmode="numeric">
+                            </div>
+                        </div>
+                        <div class="govuk-date-input__item">
+                            <div class="govuk-form-group">
+                                <label class="govuk-label govuk-date-input__label" for="offence-start-year">
+                                        Year
+                                    </label>
+                                <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="offence-start-year" name="offence-start-year" type="text" pattern="[0-9]*" inputmode="numeric">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="govuk-form-group">
+                    <h2 class="govuk-heading-m">Does the offence have an end date?</h2>
+                    <div class="govuk-radios" data-module="govuk-radios">
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="offence-end-date" name="offence-end-date" type="radio" value="offence-end-date" aria-controls="conditional-end-date" aria-expanded="false">
+                            <label class="govuk-label govuk-radios__label" for="offence-end-date">
+                                    Yes
+                                </label>
+                        </div>
+                        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-end-date">
+                            <div class="govuk-form-group">
+                                <label class="govuk-heading-m" for="offence-end-date">
+                                        Offence end date
+                                    </label>
+                                <div class="govuk-date-input" id="offence-end-date">
+                                    <div class="govuk-date-input__item">
+                                        <div class="govuk-form-group">
+                                            <label class="govuk-label govuk-date-input__label" for="offence-end-day">
+                                                    Day
+                                                </label>
+                                            <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="offence-end-day" name="offence-end-day" type="text" pattern="[0-9]*" inputmode="numeric">
+                                        </div>
+                                    </div>
+                                    <div class="govuk-date-input__item">
+                                        <div class="govuk-form-group">
+                                            <label class="govuk-label govuk-date-input__label" for="offence-end-month">
+                                                    Month
+                                                </label>
+                                            <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="offence-end-month" name="offence-end-month" type="text" pattern="[0-9]*" inputmode="numeric">
+                                        </div>
+                                    </div>
+                                    <div class="govuk-date-input__item">
+                                        <div class="govuk-form-group">
+                                            <label class="govuk-label govuk-date-input__label" for="offence-end-year">
+                                                    Year
+                                                </label>
+                                            <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="offence-end-year" name="offence-end-year" type="text" pattern="[0-9]*" inputmode="numeric">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="offence-end-date" name="offence-end-date" type="radio" value="offence-end-date">
+                            <label class="govuk-label govuk-radios__label" for="offence-end-date">
+                                    No
+                                </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="govuk-form-group">
+                    <label class="govuk-label govuk-label govuk-label--m" for="outcome-picker">
+                            Outcome
+                        </label>
+                    <div id="outcome-hint" class="govuk-hint">
+                            Select an outcome
+                        </div>
+                    <select id="outcome-picker" class="govuk-select" name="outcome" type="text" aria-describedby="outcome-hint">
+                        <option class="outcome-picker-item" value=""></option>
+                        <option class="outcome-picker-item" value="Guilty" data-url="sentence-detail.html">Guilty</option>
+                        <option class="outcome-picker-item" value="Not guilty" data-url="sentences.html">Not guilty</option>
+                    </select>
+                </div>
+                <button id="court-details-button" class="govuk-button" data-module="govuk-button">
+                    Continue
+                </button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

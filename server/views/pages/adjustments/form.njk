@@ -1,0 +1,105 @@
+{% extends "../../partials/layout.njk" %}
+
+{% set pageTitle = applicationName + " - Home" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-xl">
+                <span class="govuk-caption-xl">Adjustments</h1>
+            </div>
+            <div class="govuk-grid-column-one-half">
+                <form class="form" method="post">
+                    <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-label govuk-label--m" for="adjustment-type">
+                            Adjustment type
+                        </label>
+                        <select class="govuk-select" id="adjustment-type" name="adjustment-type">
+                            {% for adjustmentType in model.adjustmentTypes %}
+                                <option value="{{adjustmentType.code}}">{{adjustmentType.description}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="govuk-form-group">
+                        <label class="govuk-heading-m" for="adjustment-from-date">
+                            From
+                        </label>
+                        <div class="govuk-date-input" id="adjustment-from-date">
+                            <div class="govuk-date-input__item">
+                                <div class="govuk-form-group">
+                                    <label class="govuk-label govuk-date-input__label" for="adjustment-from-day">
+                                        Day
+                                    </label>
+                                    <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="adjustment-from-day" name="adjustment-from-day" type="text" pattern="[0-9]*" inputmode="numeric">
+                                </div>
+                            </div>
+                            <div class="govuk-date-input__item">
+                                <div class="govuk-form-group">
+                                    <label class="govuk-label govuk-date-input__label" for="adjustment-from-month">
+                                        Month
+                                    </label>
+                                    <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="adjustment-from-month" name="adjustment-from-month" type="text" pattern="[0-9]*" inputmode="numeric">
+                                </div>
+                            </div>
+                            <div class="govuk-date-input__item">
+                                <div class="govuk-form-group">
+                                    <label class="govuk-label govuk-date-input__label" for="adjustment-from-year">
+                                        Year
+                                    </label>
+                                    <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="adjustment-from-year" name="adjustment-from-year" type="text" pattern="[0-9]*" inputmode="numeric">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="govuk-form-group">
+                        <label class="govuk-heading-m" for="adjustment-to-date">
+                            To
+                        </label>
+                        <div class="govuk-date-input" id="adjustment-to-date">
+                            <div class="govuk-date-input__item">
+                                <div class="govuk-form-group">
+                                    <label class="govuk-label govuk-date-input__label" for="adjustment-to-day">
+                                        Day
+                                    </label>
+                                    <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="adjustment-to-day" name="adjustment-to-day" type="text" pattern="[0-9]*" inputmode="numeric">
+                                </div>
+                            </div>
+                            <div class="govuk-date-input__item">
+                                <div class="govuk-form-group">
+                                    <label class="govuk-label govuk-date-input__label" for="adjustment-to-month">
+                                        Month
+                                    </label>
+                                    <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="adjustment-to-month" name="adjustment-to-month" type="text" pattern="[0-9]*" inputmode="numeric">
+                                </div>
+                            </div>
+                            <div class="govuk-date-input__item">
+                                <div class="govuk-form-group">
+                                    <label class="govuk-label govuk-date-input__label" for="adjustment-to-year">
+                                        Year
+                                    </label>
+                                    <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="adjustment-to-year" name="adjustment-to-year" type="text" pattern="[0-9]*" inputmode="numeric">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="govuk-form-group">
+                        <label class="govuk-heading-s" for="number-of-days">Number of days</label>
+                        <input class="govuk-input govuk-!-width-one-half" id="number-of-days" name="number-of-days" type="text">
+                    </div>
+                    <div class="govuk-form-group">
+                        <label class="govuk-heading-s" for="sentence">Sentence</label>
+                        <input class="govuk-input govuk-!-width-one-half" id="sentence" name="sentence" type="text">
+                    </div>
+
+                    <button id="court-details-button" class="govuk-button" data-module="govuk-button">
+                    Continue
+                </button>
+                </form>
+            </div>
+        </div>
+    {% endblock %}
