@@ -1,0 +1,277 @@
+{% extends "../../partials/layout.njk" %}
+
+{% set pageTitle = applicationName + " - Home" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-xl">
+                <span class="govuk-caption-xl">Add custodial sentence information</span>
+                    Add sentence details</h1>
+        </h1>
+    </div>
+    <div class="govuk-grid-column-one-half">
+        <form class="form" method="post">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+            <div class="govuk-form-group">
+                <label class="govuk-heading-m" for="sentence-date">
+                            Conviction date
+                        </label>
+                <div class="govuk-date-input" id="offence-start-date">
+                    <div class="govuk-date-input__item">
+                        <div class="govuk-form-group">
+                            <label class="govuk-label govuk-date-input__label" for="conviction-day">
+                                        Day
+                                    </label>
+                            <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="conviction-day" name="offence-start-day" type="text" pattern="[0-9]*" inputmode="numeric">
+                        </div>
+                    </div>
+                    <div class="govuk-date-input__item">
+                        <div class="govuk-form-group">
+                            <label class="govuk-label govuk-date-input__label" for="conviction-month">
+                                        Month
+                                    </label>
+                            <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="conviction-month" name="offence-start-month" type="text" pattern="[0-9]*" inputmode="numeric">
+                        </div>
+                    </div>
+                    <div class="govuk-date-input__item">
+                        <div class="govuk-form-group">
+                            <label class="govuk-label govuk-date-input__label" for="conviction-year">
+                                        Year
+                                    </label>
+                            <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="conviction-year" name="offence-start-year" type="text" pattern="[0-9]*" inputmode="numeric">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="govuk-form-group">
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                                Sentence type
+                            </legend>
+                    <select id="sentence-type" class="enhance-autcomplete" name="sentence-type" type="text" aria-describedby="search-hint">
+                        <option></option>
+                        <option value="ADIMP" standard="" determinate="" sentence="">CJA03 Standard Determinate Sentence</option>
+                        <option value="ADIMP_ORA" sentencing="" code="" standard="" determinate="" sentence="">ORA Sentencing Code Standard Determinate Sentence</option>
+                        <option value="Sentencing" code="" standard="" determinate="" sentence="">Sentencing Code Standard Determinate Sentence</option>
+                        <option value="ORA" cja03="" standard="" determinate="" sentence="">ORA CJA03 Standard Determinate Sentence</option>
+                        <option value="Licence" recall="">Licence Recall</option>
+                        <option value="EDS" laspo="" discretionary="" release="">EDS LASPO Discretionary Release</option>
+                        <option value="ORA" licence="" recall="">ORA Licence Recall</option>
+                        <option value="ORA" licence="" recall="">ORA Licence Recall</option>
+                        <option value="Section" 236a="" sopc="" cja03="">Section 236A SOPC CJA03</option>
+                        <option value="Licence" recall="">Licence Recall</option>
+                        <option value="Indeterminate" sentence="" for="" the="" public="" protection="">Indeterminate Sentence for the Public Protection</option>
+                        <option value="Imprisonment" in="" default="" of="" fine="">Imprisonment in Default of Fine</option>
+                        <option value="EDS" sec="" 279="" sentencing="" code="" (21+)="">EDS Sec 279 Sentencing Code (21+)</option>
+                        <option value="Imprisonment" in="" default="" of="" fine="">Imprisonment in Default of Fine</option>
+                        <option value="Life" imprisonment="" or="" detention="" s.53(1)="" cypa="" 1933="">Life Imprisonment or Detention S.53(1) CYPA 1933</option>
+                        <option value="ORA" young="" offender="" institution="">ORA Young Offender Institution</option>
+                        <option value="Young" offender="" institution="">Young Offender Institution</option>
+                        <option value="Life" or="" indeterminate="" sentence="" for="" public="" protection="">Life or Indeterminate Sentence for Public Protection</option>
+                        <option value="Licence" recall="" from="" ipp="" sentence="">Licence recall from IPP Sentence</option>
+                        <option value="Adult" mandatory="" life="">Adult Mandatory Life</option>
+                        <option value="Young" offender="" institution="">Young Offender Institution</option>
+                        <option value="SOPC" sec="" 278="" sentencing="" code="" (21+)="">SOPC Sec 278 Sentencing Code (21+)</option>
+                        <option value="Adult" discretionary="" life="">Adult Discretionary Life</option>
+                        <option value="Automatic" life="">Automatic LIfe</option>
+                        <option value="Adult" imprison="" above="" 4="" years="" (not="" life)="">Adult Imprison above 4 years (not Life)</option>
+                        <option value="ORA" young="" offender="" institution="">ORA Young Offender Institution</option>
+                        <option value="LR" -="" eds="" laspo="" discretionary="" release="">LR - EDS LASPO Discretionary Release</option>
+                        <option value="Adult" imprison="" above="" 12="" mths="" below="" 4="" yrs="">Adult Imprison above 12 mths below 4 yrs</option>
+                        <option value="Licence" recall="" from="" extended="" sentence="" for="" public="" protection="">Licence recall from Extended Sentence for Public Protection</option>
+                        <option value="Legacy" (pre="" 1991="" act)="">Legacy (pre 1991 Act)</option>
+                        <option value="ORA" 14="" day="" fixed="" term="" recall="">ORA 14 Day Fixed Term Recall</option>
+                        <option value="Recall" to="" custody="" indeterminate="" sentence="">Recall to Custody Indeterminate Sentence</option>
+                        <option value="Adult" mandatory="" life="">Adult Mandatory Life</option>
+                        <option value="Recall" to="" custody="" indeterminate="" sentence="">Recall to Custody Indeterminate Sentence</option>
+                        <option value="Recall" from="" yoi="">Recall from YOI</option>
+                        <option value="ORA" detention="" and="" training="" order="">ORA Detention and Training Order</option>
+                        <option value="ORA" breach="" top="" up="" supervision="">ORA Breach Top Up Supervision</option>
+                        <option value="Automatic" life="">Automatic Life</option>
+                        <option value="ORA" 28="" day="" fixed="" term="" recall="">ORA 28 Day Fixed Term Recall</option>
+                        <option value="EDS" sec="" 266="" sentencing="" code="" (18="" -="" 20)="">EDS Sec 266 Sentencing Code (18 - 20)</option>
+                        <option value="Detention" during="" her="" majesty's="" pleasure="">Detention During Her Majesty's Pleasure</option><option value="Detention" for="" life="">Detention For Life</option>
+                        <option value="Imprisoned" in="" default="" of="" a="" fine="">Imprisoned in Default of a fine</option>
+                        <option value="Fixed" term="" recall="" pre="" ora="" sentence="">Fixed Term Recall Pre ORA Sentence</option>
+                        <option value="Extended" sent="" public="" protection="" cja="" 03="">Extended Sent Public Protection CJA 03</option>
+                        <option value="Adult" imprisonment="" less="" than="" 12="" months="">Adult Imprisonment less than 12 months</option>
+                        <option value="ORA" recalled="" from="" curfew="" conditions="">ORA Recalled from Curfew Conditions</option>
+                        <option value="Recall" from="" automatic="" life="">Recall from Automatic Life</option>
+                        <option value="Licence" recall="">Licence Recall</option>
+                        <option value="Detention" and="" training="" order="">Detention and Training Order</option>
+                        <option value="Serious" offence="" -18="" cja03="" pocca="" 2000="">Serious Offence -18 CJA03 POCCA 2000</option>
+                        <option value="Recall" from="" discretionary="" life="">Recall from Discretionary Life</option>
+                        <option value="Serious" offence="" sec="" 250="" sentencing="" code="" (u18)="">Serious Offence Sec 250 Sentencing Code (U18)</option>
+                        <option value="Automatic" life="" sec="" 224a="" 03="">Automatic Life Sec 224A 03</option>
+                        <option value="LR" -="" eds="" laspo="" automatic="" release="">LR - EDS LASPO Automatic Release</option>
+                        <option value="ORA" 28="" day="" fixed="" term="" recall="">ORA 28 Day Fixed Term Recall</option>
+                        <option value="Adult" discretionary="" life="">Adult Discretionary Life</option>
+                        <option value="Recall" to="" custody="" mandatory="" life="">Recall to Custody Mandatory Life</option>
+                        <option value="Recall" from="" yoi="">Recall from YOI</option>
+                        <option value="Custody" life="" (18-21="" years="" old)="">Custody Life (18-21 Years Old)</option>
+                        <option value="Adult" discretionary="" life="">Adult Discretionary Life</option>
+                        <option value="Custody" for="" life="" -="" under="" 21="" cja03="">Custody For Life - Under 21 CJA03</option>
+                        <option value="Civil" imprisonment="">Civil Imprisonment</option>
+                        <option value="ORA" serious="" offence="" -18="" cja03="" pocca="" 2000="">ORA Serious Offence -18 CJA03 POCCA 2000</option>
+                        <option value="ORA" serious="" offence="" sec="" 250="" sentencing="" code="" (u18)="">ORA Serious Offence Sec 250 Sentencing Code (U18)</option>
+                        <option value="Adult" mandatory="" life="">Adult Mandatory Life</option>
+                        <option value="Sent" extended="" sec="" 86="" of="" pcc(s)="" act="" 2000="">Sent Extended Sec 86 of PCC(S) Act 2000</option>
+                        <option value="Recall" to="" custody="" indeterminate="" sentence="">Recall to Custody Indeterminate Sentence</option>
+                        <option value="Breach" of="" curfew="">Breach of Curfew</option>
+                        <option value="LR" -="" eds="" sec="" 279="" sentencing="" code="" (21+)="">LR - EDS Sec 279 Sentencing Code (21+)</option>
+                        <option value="EDS" sec="" 254="" sentencing="" code="" (u18)="">EDS Sec 254 Sentencing Code (U18)</option>
+                        <option value="Fixed" term="" recall="" pre="" ora="" sentence="">Fixed Term Recall Pre ORA Sentence</option>
+                        <option value="Detention" during="" her="" majesty'="" s="" pleasure="">Detention During Her Majesty' s   Pleasure</option><option value="EDS" laspo="" automatic="" release="">EDS LASPO Automatic Release</option>
+                        <option value="ORA" hdc="" recall="" (not="" curfew="" violation)="">ORA HDC Recall (not curfew violation)</option>
+                        <option value="Inability" to="" monitor="">Inability to Monitor</option>
+                        <option value="ORA" detention="" and="" training="" order="">ORA Detention and Training Order</option>
+                        <option value="Recall" serious="" off="" -="" 18="" cja03="" pocca="" 2000="">Recall Serious Off - 18 CJA03 POCCA 2000</option>
+                        <option value="Detention" for="" life="">Detention For Life</option>
+                        <option value="Recall" from="" automatic="" life="">Recall from Automatic Life</option>
+                        <option value="Automatic" life="" sec="" 273="" sentencing="" code="" (18="" -="" 20)="">Automatic Life Sec 273 Sentencing Code (18 - 20)</option>
+                        <option value="Young" offender="" institution="">Young Offender Institution</option>
+                        <option value="Detention" for="" public="" protection="">Detention For Public Protection</option>
+                        <option value="Breach" of="" curfew="">Breach of Curfew</option>
+                        <option value="ORA" fixed="" term="" recall="" while="" on="" hdc="">ORA Fixed Term Recall while on HDC</option>
+                        <option value="Licence" recall="" from="" extended="" sentence="">Licence recall from Extended Sentence</option>
+                        <option value="Detention" and="" training="" order="">Detention and Training Order</option>
+                        <option value="LR" -="" section="" 236a="" sopc="" cja03="">LR - Section 236A SOPC CJA03</option>
+                        <option value="Civil" imprisonment="">Civil Imprisonment</option>
+                        <option value="Custody" for="" life="" sec="" 272="" sentencing="" code="" (18="" -="" 20)="">Custody For Life Sec 272 Sentencing Code (18 - 20)</option>
+                        <option value="Detention" during="" her="" majesty's="" pleasure="">Detention During Her Majesty's Pleasure</option><option value="Custody" for="" life="" sec="" 275="" sentencing="" code="" (murder)="" (u21)="">Custody For Life Sec 275 Sentencing Code (Murder) (U21)</option>
+                        <option value="SOPC" sec="" 265="" sentencing="" code="" (18="" -="" 20)="">SOPC Sec 265 Sentencing Code (18 - 20)</option>
+                        <option value="Automatic" life="">Automatic Life</option>
+                        <option value="Recall" from="" discretionary="" life="">Recall from Discretionary Life</option>
+                        <option value="ORA" recalled="" from="" curfew="" conditions="">ORA Recalled from Curfew Conditions</option>
+                        <option value="Automatic" life="" sec="" 283="" sentencing="" code="" (21+)="">Automatic Life Sec 283 Sentencing Code (21+)</option>
+                        <option value="Recall" to="" custody="" mandatory="" life="">Recall to Custody Mandatory Life</option>
+                        <option value="Extended" sentence="" for="" the="" public="" protection="">Extended Sentence for the Public Protection</option>
+                        <option value="Migrated" sentence="" data="">Migrated Sentence Data</option>
+                        <option value="Special" sentence="" of="" detention="" for="" terrorist="" offenders="" particular="" concern="" sec="" 252a="">Special sentence of detention for terrorist offenders of particular concern Sec 252A</option>
+                        <option value="Recall" serious="" offence="" sec="" 250="" sentencing="" code="" (u18)="">Recall Serious Offence Sec 250 Sentencing Code (U18)</option>
+                        <option value="Detention" for="" life="">Detention For Life</option>
+                        <option value="14" day="" fixed="" term="" recall="" from="" hdc="">14 Day Fixed Term Recall from HDC</option>
+                        <option value="Inability" to="" monitor="">Inability to Monitor</option>
+                        <option value="Licence" recall="" from="" dpp="" sentence="">Licence recall from DPP Sentence</option>
+                        <option value="ORA" hdc="" recall="" (not="" curfew="" violation)="">ORA HDC Recall (not curfew violation)</option>
+                        <option value="Youth" rehabilitation="" order="">Youth Rehabilitation Order</option>
+                        <option value="Recall" from="" automatic="" life="" sec="" 224a="" 03="">Recall from Automatic Life Sec 224A 03</option>
+                        <option value="LR" -="" eds="" sec="" 266="" sentencing="" code="" (18="" 20)="">LR - EDS Sec 266 Sentencing Code (18 - 20)</option>
+                        <option value="Licence" recall="" from="" dpp="" sentence="">Licence recall from DPP Sentence</option>
+                        <option value="Fixed" term="" recall="" while="" on="" hdc="">Fixed Term Recall while on HDC</option>
+                        <option value="ORA" breach="" top="" up="" supervision="">ORA Breach Top Up Supervision</option>
+                        <option value="Migrated" sentence="" data="">Migrated Sentence Data</option>
+                        <option value="ORA" 14="" day="" fixed="" term="" recall="">ORA 14 Day Fixed Term Recall</option>
+                        <option value="LR" -="" sopc="" sec="" 278="" sentencing="" code="" (21+)="">LR - SOPC Sec 278 Sentencing Code (21+)</option>
+                        <option value="Custody" life="" (18-21="" years="" old)="">Custody Life (18-21 Years Old)</option>
+                        <option value="Detention" and="" training="" order="">Detention and Training Order</option>
+                        <option value="Custody" for="" life="" -="" under="" 21="">Custody For Life - Under 21</option>
+                        <option value="Detention" for="" public="" protection="">Detention For Public Protection</option>
+                        <option value="Serious" offence="" -18="" pocca="" 2000="">Serious Offence -18 POCCA 2000</option>
+                        <option value="IMPRISONED" for="" less="" than="" 12="" months="">IMPRISONED FOR LESS THAN 12 MONTHS</option>
+                        <option value="ORA" ftr="" schedule="" 15="" offender="">ORA FTR Schedule 15 Offender</option>
+                        <option value="Violent" offender="" order="">Violent Offender Order</option>
+                        <option value="CIVIL" imprisonment="" over="" 12="" months="" sentence="">CIVIL IMPRISONMENT OVER 12 MONTHS SENTENCE</option>
+                        <option value="Life" imprisonment="">Life Imprisonment</option>
+                        <option value="Recall" from="" automatic="" life="" sec="" 283="" sentencing="" code="" (21+)="">Recall from Automatic Life Sec 283 Sentencing Code (21+)</option>
+                    </select>
+                </div>
+                <form class="form" action="sentence-length">
+                    <div class="govuk-form-group">
+                        <label class="govuk-heading-m" for="sentence-date">
+                                Sentence date
+                            </label>
+                        <div class="govuk-date-input" id="sentence-date">
+                            <div class="govuk-date-input__item">
+                                <div class="govuk-form-group">
+                                    <label class="govuk-label govuk-date-input__label" for="sentence-date-day">
+                                            Day
+                                        </label>
+                                    <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="sentence-date-day" name="sentence-start-day" type="text" pattern="[0-9]*" inputmode="numeric">
+                                </div>
+                            </div>
+                            <div class="govuk-date-input__item">
+                                <div class="govuk-form-group">
+                                    <label class="govuk-label govuk-date-input__label" for="sentence-date-month">
+                                            Month
+                                        </label>
+                                    <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="sentence-date-month" name="sentence-start-month" type="text" pattern="[0-9]*" inputmode="numeric">
+                                </div>
+                            </div>
+                            <div class="govuk-date-input__item">
+                                <div class="govuk-form-group">
+                                    <label class="govuk-label govuk-date-input__label" for="sentence-date-year">
+                                            Year
+                                        </label>
+                                    <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="sentence-date-year" name="sentence-start-year" type="text" pattern="[0-9]*" inputmode="numeric">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="govuk-form-group">
+                        <h2 class="govuk-heading-m">Do you have the sentence length for this offence?</h2>
+                        <div class="govuk-radios" data-module="govuk-radios">
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input" id="offence-end-date" name="offence-end-date" type="radio" value="offence-end-date" data-aria-controls="conditional-end-date">
+                                <label class="govuk-label govuk-radios__label" for="offence-end-date">
+                                        Yes
+                                    </label>
+                            </div>
+                            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-end-date">
+                                <div class="govuk-form-group">
+                                    <label class="govuk-heading-m" for="sentence-date">
+                                            Sentence length
+                                        </label>
+                                    <div class="govuk-date-input" id="sentence-date">
+                                        <div class="govuk-date-input__item">
+                                            <div class="govuk-form-group">
+                                                <label class="govuk-label govuk-date-input__label" for="sentence-length-years">
+                                                        Years
+                                                    </label>
+                                                <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="sentence-length-years" name="sentence-length-years" type="text" pattern="[0-9]*" inputmode="numeric">
+                                            </div>
+                                        </div>
+                                        <div class="govuk-date-input__item">
+                                            <div class="govuk-form-group">
+                                                <label class="govuk-label govuk-date-input__label" for="sentence-length-months">
+                                                        Months
+                                                    </label>
+                                                <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="sentence-length-months" name="sentence-length-months" type="text" pattern="[0-9]*" inputmode="numeric">
+                                            </div>
+                                        </div>
+                                        <div class="govuk-date-input__item">
+                                            <div class="govuk-form-group">
+                                                <label class="govuk-label govuk-date-input__label" for="sentence-length-weeks">
+                                                        Weeks
+                                                    </label>
+                                                <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="sentence-length-weeks" name="sentence-length-weeks" type="text" pattern="[0-9]*" inputmode="numeric">
+                                            </div>
+                                        </div>
+                                        <div class="govuk-date-input__item">
+                                            <div class="govuk-form-group">
+                                                <label class="govuk-label govuk-date-input__label" for="ssentence-length-days">
+                                                        Days
+                                                    </label>
+                                                <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="sentence-length-days" name="sentence-length-days" type="text" pattern="[0-9]*" inputmode="numeric">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input" id="offence-end-date" name="offence-end-date" type="radio" value="offence-end-date">
+                                <label class="govuk-label govuk-radios__label" for="offence-end-date">
+                                        No
+                                    </label>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="court-details-button" class="govuk-button" data-module="govuk-button">
+                        Continue
+                    </button>
+                </form>
+            </div>
+        </div>
+    {% endblock %}

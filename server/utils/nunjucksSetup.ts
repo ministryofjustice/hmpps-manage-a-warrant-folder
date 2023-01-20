@@ -2,6 +2,7 @@
 import nunjucks from 'nunjucks'
 import express from 'express'
 import * as pathModule from 'path'
+import dayjs from 'dayjs'
 import { initialiseName } from './utils'
 
 const production = process.env.NODE_ENV === 'production'
@@ -35,8 +36,10 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
     {
       autoescape: true,
       express: app,
-    },
+    }
   )
 
   njkEnv.addFilter('initialiseName', initialiseName)
+
+  njkEnv.addFilter('date', (date, format) => dayjs(date).format(format))
 }
