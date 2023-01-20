@@ -4,7 +4,9 @@ import asyncMiddleware from '../middleware/asyncMiddleware'
 import AdjustmentRoutes from '../pages/adjustments/routes/adjustmentRoutes'
 import ChargeRoutes from '../pages/charges/routes/chargeRoutes'
 import CourtRoutes from '../pages/courts/routes/courtRoutes'
+import RemandRoutes from '../pages/remand/routes/remandRoutes'
 import SentenceRoutes from '../pages/sentences/routes/sentenceRoutes'
+import StartRoute from '../pages/start/startRoute.ts/startRoutes'
 import type { Services } from '../services'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -17,10 +19,15 @@ export default function routes(service: Services): Router {
   const chargeRoutes = new ChargeRoutes(service.prisonerService, service.warrantFormDataService)
   const sentenceRoutes = new SentenceRoutes(service.prisonerService, service.warrantFormDataService)
   const adjustmentRoutes = new AdjustmentRoutes(service.prisonerService)
+  const remandRoutes = new RemandRoutes(service.prisonerService)
+  const startRoutes = new StartRoute()
 
   get('/', (req, res, next) => {
     res.render('pages/index')
   })
+  get('/start', startRoutes.start)
+
+  get('/remand/:nomsId', remandRoutes.remandDetails)
 
   get('/courts/:nomsId', courtRoutes.courtDetails)
   post('/courts/:nomsId', courtRoutes.submitCourtDetails)

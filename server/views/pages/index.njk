@@ -4,8 +4,35 @@
 {% set mainClasses = "app-container govuk-body" %}
 
 {% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <form action="start">
+        <h1 class="govuk-heading-xl">Manage a digital warrant folder</h1>
+        <p class="govuk-body">This service is a work in progress and the following are a list of proof of concepts.</p>
 
-  <h1>This site is under construction...</h1>
-  <p>Please check back later when there is content to view.</p>
+        <p class="govuk-body">Relevant remand<br/>
+          <input class="govuk-input govuk-input--width-10" id="width-10" name="remand-prisoner" type="text">
+          <button class="govuk-button" data-module="govuk-button" name="remand" value="true">
+            Start
+          </button>
+        </p>
 
+        <p class="govuk-body">Custodial warrant POC <br/>
+          <input class="govuk-input govuk-input--width-10" id="width-10" name="warrant-prisoner" type="text">
+          <button class="govuk-button" data-module="govuk-button" name="warrant" value="true">
+            Start
+          </button>
+        </p>
+
+        <p class="govuk-body">Adjustments <br/>
+          <input class="govuk-input govuk-input--width-10" id="width-10" name="adjustments-prisoner" type="text">
+          <button class="govuk-button" data-module="govuk-button" name="adjustments" value="true">
+            Start
+          </button>
+        </p>
+
+      </form>
+    </div>
+
+  </div>
 {% endblock %}
