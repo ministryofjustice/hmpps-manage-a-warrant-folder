@@ -1,6 +1,7 @@
 import { dataAccess } from '../data'
 import PrisonerService from './prisonerService'
 import UserService from './userService'
+import WarrantFolderService from './warrantFolderService'
 import WarrantFormDataService from './warrantFormDataService'
 
 export const services = () => {
@@ -9,10 +10,12 @@ export const services = () => {
   const userService = new UserService(hmppsAuthClient)
   const prisonerService = new PrisonerService(hmppsAuthClient)
   const warrantFormDataService = new WarrantFormDataService(prisonerService)
+  const warrantFolderService = new WarrantFolderService()
   return {
     userService,
     prisonerService,
     warrantFormDataService,
+    warrantFolderService,
   }
 }
 
