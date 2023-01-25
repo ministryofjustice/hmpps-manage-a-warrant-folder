@@ -19,7 +19,7 @@ export default function routes(service: Services): Router {
   const chargeRoutes = new ChargeRoutes(service.prisonerService, service.warrantFormDataService)
   const sentenceRoutes = new SentenceRoutes(service.prisonerService, service.warrantFormDataService)
   const adjustmentRoutes = new AdjustmentRoutes(service.prisonerService)
-  const remandRoutes = new RemandRoutes(service.prisonerService)
+  const remandRoutes = new RemandRoutes(service.prisonerService, service.warrantFolderService)
   const startRoutes = new StartRoute()
 
   get('/', (req, res, next) => {
@@ -28,6 +28,7 @@ export default function routes(service: Services): Router {
   get('/start', startRoutes.start)
 
   get('/remand/:nomsId', remandRoutes.remandDetails)
+  post('/remand/:nomsId', remandRoutes.submitRemand)
 
   get('/courts/:nomsId', courtRoutes.courtDetails)
   post('/courts/:nomsId', courtRoutes.submitCourtDetails)

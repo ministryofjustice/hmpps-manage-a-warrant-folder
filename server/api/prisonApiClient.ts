@@ -2,8 +2,10 @@ import config, { ApiConfig } from '../config'
 import RestClient from '../data/restClient'
 import type {
   PrisonApiAdjustment,
+  PrisonApiBookingAndSentenceAdjustments,
   PrisonApiCharge,
   PrisonApiCourtCase,
+  PrisonApiCourtDateResult,
   PrisonApiPrisoner,
   PrisonApiSentence,
   PrisonApiUserCaseloads,
@@ -50,5 +52,17 @@ export default class PrisonApiClient {
       path: `/api/digital-warrant/booking/${bookingId}/adjustment`,
       data: sentence,
     }) as Promise<number>
+  }
+
+  async getCourtDateResults(nomsId: string): Promise<PrisonApiCourtDateResult[]> {
+    return this.restClient.get({
+      path: `/api/digital-warrant/court-date-results/${nomsId}`,
+    }) as Promise<PrisonApiCourtDateResult[]>
+  }
+
+  async getBookingAndSentenceAdjustments(bookingId: number): Promise<PrisonApiBookingAndSentenceAdjustments> {
+    return this.restClient.get({
+      path: `/api/adjustments/${bookingId}/sentence-and-booking`,
+    }) as Promise<PrisonApiBookingAndSentenceAdjustments>
   }
 }

@@ -74,6 +74,14 @@ export default {
       },
       agent: new AgentConfig(),
     },
+    warrantFolder: {
+      url: get('WARRANT_FOLDER_URL', 'http://localhost:8080', requiredInProduction),
+      timeout: {
+        response: get('WARRANT_FOLDER_TIMEOUT_RESPONSE', 10000),
+        deadline: get('WARRANT_FOLDER_TIMEOUT_DEADLINE', 10000),
+      },
+      agent: new AgentConfig(),
+    },
   },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
 }
