@@ -15,7 +15,7 @@ export default class RemandRoutes {
 
     const prisonerDetail = await this.prisonerService.getPrisonerDetail(nomsId, caseloads, token)
 
-    const nomisRemand = await (
+    const nomisRemand = (
       await this.prisonerService.getBookingAndSentenceAdjustments(prisonerDetail.bookingId, token)
     ).sentenceAdjustments.filter(it => it.type === 'REMAND')
 
