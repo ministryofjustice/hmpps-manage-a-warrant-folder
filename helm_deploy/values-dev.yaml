@@ -6,6 +6,9 @@ generic-service:
 
   ingress:
     host: manage-a-warrant-folder-dev.hmpps.service.justice.gov.uk
+    contextColour: green
+    v1_2_enabled: true
+    v0_47_enabled: false
 
   env:
     INGRESS_URL: "https://manage-a-warrant-folder-dev.hmpps.service.justice.gov.uk"
