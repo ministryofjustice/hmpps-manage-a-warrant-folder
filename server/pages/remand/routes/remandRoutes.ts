@@ -1,12 +1,15 @@
 import { RequestHandler } from 'express'
+import { stringify } from 'csv-stringify'
 import { PrisonApiAdjustment } from '../../../@types/prisonApi/prisonClientTypes'
 import PrisonerService from '../../../services/prisonerService'
 import WarrantFolderService from '../../../services/warrantFolderService'
+import BulkRemandCalculationService from '../services/bulkRemandCalculationService'
 
 export default class RemandRoutes {
   constructor(
     private readonly prisonerService: PrisonerService,
-    private readonly warrantFolderService: WarrantFolderService
+    private readonly warrantFolderService: WarrantFolderService,
+    private readonly bulkRemandCalculationService: BulkRemandCalculationService
   ) {}
 
   public remandDetails: RequestHandler = async (req, res): Promise<void> => {
@@ -48,5 +51,24 @@ export default class RemandRoutes {
     await this.prisonerService.createAdjustment(prisonerDetail.bookingId, adjustment, token)
 
     return res.redirect(`/remand/${nomsId}`)
+  }
+
+  public bulkRemand: RequestHandler = async (req, res): Promise<void> => {
+    return res.render('pages/remand/bulk')
+  }
+
+  public submitBulkRemand: RequestHandler = async (req, res) => {
+    const { caseloads, token } = res.locals.user
+    const { prisonerIds } = req.body
+    const nomsIds = prisonerIds.split(/\r?\n/)
+    if (nomsIds.length > 500) return res.redirect(`/remand/`)
+
+    const results = await this.bulkRemandCalculationService.runCalculations(caseloads, token, nomsIds)
+    const fileName = `download-remand-dates.csv`
+    res.setHeader('Content-Type', 'text/csv')
+    res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`)
+    return stringify(results, {
+      header: true,
+    }).pipe(res)
   }
 }
