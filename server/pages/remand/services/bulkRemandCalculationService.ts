@@ -25,7 +25,7 @@ export default class BulkRemandCalculationService {
 
     for (const nomsId of nomsIds) {
       try {
-        const prisonDetails = await this.prisonerService.getPrisonerDetail(nomsId, caseloads, token)
+        const prisonDetails = await this.prisonerService.getPrisonerDetailIncludingReleased(nomsId, caseloads, token)
         const bookingId = prisonDetails.bookingId
         const nomisRemand = (
           await this.prisonerService.getBookingAndSentenceAdjustments(bookingId, token)
