@@ -63,12 +63,15 @@ export default class BulkRemandCalculationService {
     return {
       NOMS_ID: nomsId,
       ACTIVE_BOOKING_ID: bookingId,
+      AGENCY_LOCATION_ID: prisoner?.agencyId,
       COURT_DATES_JSON: JSON.stringify(courtDates),
       NOMIS_REMAND_DAYS: this.sumRemandDays(nomisRemand),
       CALCULATED_REMAND_DAYS: this.sumRemandDays(calculatedRemand),
       NOMIS_REMAND_JSON: JSON.stringify(nomisRemand),
       CALCULATED_REMAND_JSON: JSON.stringify(calculatedRemand),
       IS_REMAND_SAME: this.isRemandSame(nomisRemand, calculatedRemand) ? 'Y' : 'N',
+      IS_DATES_SAME: this.isDatesSame(nomisRemand, calculatedRemand) ? 'Y' : 'N',
+      IS_DAYS_SAME: this.isDaysSame(nomisRemand, calculatedRemand) ? 'Y' : 'N',
       ERROR_JSON: JSON.stringify(ex),
       ERROR_TEXT: errorText,
     }
@@ -76,6 +79,36 @@ export default class BulkRemandCalculationService {
 
   private isRemandSame(nomisRemand: Remand[], calculatedRemand: Remand[]): boolean {
     return nomisRemand != null && calculatedRemand != null && sameMembers(nomisRemand, calculatedRemand)
+  }
+
+  private isDaysSame(nomisRemand: Remand[], calculatedRemand: Remand[]): boolean {
+    return (
+      nomisRemand != null &&
+      calculatedRemand != null &&
+      sameMembers(
+        nomisRemand.map(it => {
+          return { days: it.days }
+        }),
+        calculatedRemand.map(it => {
+          return { days: it.days }
+        })
+      )
+    )
+  }
+
+  private isDatesSame(nomisRemand: Remand[], calculatedRemand: Remand[]): boolean {
+    return (
+      nomisRemand != null &&
+      calculatedRemand != null &&
+      sameMembers(
+        nomisRemand.map(it => {
+          return { from: it.from, to: it.to }
+        }),
+        calculatedRemand.map(it => {
+          return { from: it.from, to: it.to }
+        })
+      )
+    )
   }
 
   private sumRemandDays(remand: Remand[]): number {
