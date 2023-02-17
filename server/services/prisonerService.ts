@@ -14,10 +14,27 @@ import FullPageError from '../model/FullPageError'
 export default class PrisonerService {
   constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
 
-  public async getPrisonerDetail(nomsId: string, userCaseloads: string[], token: string): Promise<PrisonApiPrisoner> {
+  async getPrisonerDetailIncludingReleased(
+    nomsId: string,
+    userCaseloads: string[],
+    token: string
+  ): Promise<PrisonApiPrisoner> {
+    return this.getPrisonerDetailImpl(nomsId, userCaseloads, token, true)
+  }
+
+  async getPrisonerDetail(nomsId: string, userCaseloads: string[], token: string): Promise<PrisonApiPrisoner> {
+    return this.getPrisonerDetailImpl(nomsId, userCaseloads, token, false)
+  }
+
+  private async getPrisonerDetailImpl(
+    nomsId: string,
+    userCaseloads: string[],
+    token: string,
+    includeReleased: boolean
+  ): Promise<PrisonApiPrisoner> {
     try {
       const prisonerDetail = await new PrisonApiClient(token).getPrisonerDetail(nomsId)
-      if (userCaseloads.includes(prisonerDetail.agencyId)) {
+      if (userCaseloads.includes(prisonerDetail.agencyId) || (includeReleased && prisonerDetail.agencyId === 'OUT')) {
         return prisonerDetail
       }
       throw FullPageError.notInCaseLoadError()
