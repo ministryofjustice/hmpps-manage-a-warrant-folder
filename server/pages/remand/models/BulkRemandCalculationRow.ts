@@ -7,6 +7,8 @@ type BulkRemandCalculationRow = {
   NOMIS_REMAND_JSON: string
   CALCULATED_REMAND_JSON: string
   IS_REMAND_SAME: 'Y' | 'N'
+  IS_DAYS_SAME: 'Y' | 'N'
+  IS_DATES_SAME: 'Y' | 'N'
 
   ERROR_TEXT: string
   ERROR_JSON: string
