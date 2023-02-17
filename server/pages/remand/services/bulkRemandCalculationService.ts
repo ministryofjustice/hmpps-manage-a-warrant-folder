@@ -63,6 +63,7 @@ export default class BulkRemandCalculationService {
     return {
       NOMS_ID: nomsId,
       ACTIVE_BOOKING_ID: bookingId,
+      AGENCY_LOCATION_ID: prisoner?.agencyId,
       COURT_DATES_JSON: JSON.stringify(courtDates),
       NOMIS_REMAND_DAYS: this.sumRemandDays(nomisRemand),
       CALCULATED_REMAND_DAYS: this.sumRemandDays(calculatedRemand),
