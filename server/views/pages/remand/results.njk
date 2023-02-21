@@ -12,12 +12,55 @@
         </div>
     </div>
 
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-l">Adjustments</h1>
+        <h3 class="govuk-heading-m">Remand</h3>
+        <p>The adjustments have been calculated based on the information in NOMIS.
+                    The rules for applying remand time can be found in <a href="#">the policy framework</a>.</p>
+        <table class="govuk-table govuk-!-margin-bottom-8">
+            <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                    <th class="govuk-table__header" scope="col">Details</th>
+                    <th class="govuk-table__header" scope="col">Days</th>
+                </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+
+                {% for remand in model.relevantRemand.remandPeriods %}
+                    <tr class="govuk-table__row">
+                        <!-- Dates -->
+                        <td class="govuk-table__cell">
+                            <span class="govuk-hint">Case reference: {{remand.courtCaseRef}}</span><br>
+                            {{remand.offenceDescription}}<br>
+                            <span class="govuk-!-padding-top-3">
+                                <b>From {{remand.from | date('dddd, DD MMMM YYYY') }} to {{remand.to | date('dddd, DD MMMM YYYY') }}</b>
+                            </span>
+                        </td>
+                        <!-- Days -->
+                        <td class="govuk-table__cell"><br>{{remand.days}}</td>
+
+                    </tr>
+                {% endfor %}
+
+                {# <!-- Total -->
+                <tr class="govuk-table__row">
+                    <!-- Dates -->
+                    <td class="govuk-table__cell govuk-!-font-weight-bold govuk-!-text-align-right">Total days</td>
+                    <!-- Days -->
+                    <td class="govuk-table__cell">11
+                        </td>
+                    <td class="govuk-table__cell"></td>
+                </tr> #}
+            </tbody>
+        </table>
+    </div>
+
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
             <h2 class="govuk-heading-m">Calculated dates</h2>
-            {% if model.relevantRemand.length %}
+            {% if model.relevantRemand.finalRemand.length %}
                 <p class="govuk-body">These are the relevant remand dates we have calculated.</p>
-                {% for remand in model.relevantRemand %}
+                {% for remand in model.relevantRemand.finalRemand %}
                     <dl class="govuk-summary-list">
                         <div class="govuk-summary-list__row">
                             <dt class="govuk-summary-list__key">From</dt>
@@ -41,7 +84,7 @@
                 <p class=govuk-body>No remand was calculated.</p>
             {% endif %}
 
-            {% if not model.nomisRemand.length and model.relevantRemand.length %}
+            {% if not model.nomisRemand.length and model.relevantRemand.finalRemand.length %}
                 <form class="form" method="post">
                     <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
                     <div>
