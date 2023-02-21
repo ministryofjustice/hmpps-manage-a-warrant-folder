@@ -1,6 +1,6 @@
 import config, { ApiConfig } from '../config'
 import RestClient from '../data/restClient'
-import { Remand, RemandResult } from '../@types/warrantFolder/warrantFolderTypes'
+import { RemandResult } from '../@types/warrantFolder/warrantFolderTypes'
 
 export default class WarrantFolderClient {
   restClient: RestClient
