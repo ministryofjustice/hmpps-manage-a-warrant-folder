@@ -3,7 +3,7 @@ import {
   PrisonApiPrisoner,
   PrisonApiSentenceAdjustments,
 } from '../../../@types/prisonApi/prisonClientTypes'
-import { Remand } from '../../../@types/warrantFolder/warrantFolderTypes'
+import { Remand, RemandResult } from '../../../@types/warrantFolder/warrantFolderTypes'
 import PrisonerService from '../../../services/prisonerService'
 import WarrantFolderService from '../../../services/warrantFolderService'
 import { sameMembers } from '../../../utils/utils'
@@ -55,7 +55,7 @@ export default class BulkRemandCalculationService {
     prisoner: PrisonApiPrisoner,
     nomisAdjustments: PrisonApiSentenceAdjustments[],
     courtDates: PrisonApiCourtDateResult[],
-    calculatedRemand: Remand[],
+    calculatedRemand: RemandResult,
     ex?: unknown,
     errorText?: string
   ): BulkRemandCalculationRow {
@@ -65,13 +65,14 @@ export default class BulkRemandCalculationService {
       ACTIVE_BOOKING_ID: bookingId,
       AGENCY_LOCATION_ID: prisoner?.agencyId,
       COURT_DATES_JSON: JSON.stringify(courtDates),
+      CALCULATED_ALL_JSON: JSON.stringify(calculatedRemand),
       NOMIS_REMAND_DAYS: this.sumRemandDays(nomisRemand),
-      CALCULATED_REMAND_DAYS: this.sumRemandDays(calculatedRemand),
+      CALCULATED_REMAND_DAYS: this.sumRemandDays(calculatedRemand?.finalRemand),
       NOMIS_REMAND_JSON: JSON.stringify(nomisRemand),
       CALCULATED_REMAND_JSON: JSON.stringify(calculatedRemand),
-      IS_REMAND_SAME: this.isRemandSame(nomisRemand, calculatedRemand) ? 'Y' : 'N',
-      IS_DATES_SAME: this.isDatesSame(nomisRemand, calculatedRemand) ? 'Y' : 'N',
-      IS_DAYS_SAME: this.isDaysSame(nomisRemand, calculatedRemand) ? 'Y' : 'N',
+      IS_REMAND_SAME: this.isRemandSame(nomisRemand, calculatedRemand?.finalRemand) ? 'Y' : 'N',
+      IS_DATES_SAME: this.isDatesSame(nomisRemand, calculatedRemand?.finalRemand) ? 'Y' : 'N',
+      IS_DAYS_SAME: this.isDaysSame(nomisRemand, calculatedRemand?.finalRemand) ? 'Y' : 'N',
       ERROR_JSON: JSON.stringify(ex),
       ERROR_TEXT: errorText,
     }

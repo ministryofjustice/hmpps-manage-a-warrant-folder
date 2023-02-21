@@ -3,6 +3,7 @@ type BulkRemandCalculationRow = {
   ACTIVE_BOOKING_ID: number
   AGENCY_LOCATION_ID: string
   COURT_DATES_JSON: string
+  CALCULATED_ALL_JSON: string
   NOMIS_REMAND_DAYS: number
   CALCULATED_REMAND_DAYS: number
   NOMIS_REMAND_JSON: string

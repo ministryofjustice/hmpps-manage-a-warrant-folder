@@ -37,7 +37,7 @@ export default class RemandRoutes {
     const { caseloads, token } = res.locals.user
     const { nomsId } = req.params
 
-    const relevantRemand = await this.warrantFolderService.calculateRelevantRemand(nomsId, token)
+    const relevantRemand = (await this.warrantFolderService.calculateRelevantRemand(nomsId, token)).finalRemand
     const adjustment: PrisonApiAdjustment = {
       from: relevantRemand[0].from,
       to: relevantRemand[0].to,

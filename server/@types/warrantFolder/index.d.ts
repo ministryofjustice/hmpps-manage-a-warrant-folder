@@ -27,6 +27,27 @@ export interface components {
       /** Format: int64 */
       days: number
     }
+    RemandPeriod: {
+      /** Format: date */
+      from: string
+      /** Format: date */
+      to: string
+      /** Format: date */
+      offenceDate: string
+      /** Format: date */
+      offenceEndDate?: string
+      offenceCode: string
+      offenceDescription: string
+      courtCaseRef?: string
+      /** Format: int64 */
+      chargeId: number
+      /** Format: int64 */
+      days: number
+    }
+    RemandResult: {
+      remandPeriods: components['schemas']['RemandPeriod'][]
+      finalRemand: components['schemas']['Remand'][]
+    }
   }
   responses: never
   parameters: never
@@ -56,19 +77,19 @@ export interface operations {
       /** @description Returns calculated relevant remand */
       200: {
         content: {
-          'application/json': components['schemas']['Remand'][]
+          'application/json': components['schemas']['RemandResult']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         content: {
-          'application/json': components['schemas']['Remand'][]
+          'application/json': components['schemas']['RemandResult']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
         content: {
-          'application/json': components['schemas']['Remand'][]
+          'application/json': components['schemas']['RemandResult']
         }
       }
     }
