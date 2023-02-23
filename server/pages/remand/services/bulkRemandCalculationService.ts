@@ -27,22 +27,34 @@ export default class BulkRemandCalculationService {
       try {
         const prisonDetails = await this.prisonerService.getPrisonerDetailIncludingReleased(nomsId, caseloads, token)
         const bookingId = prisonDetails.bookingId
-        const nomisRemand = (
-          await this.prisonerService.getBookingAndSentenceAdjustments(bookingId, token)
-        ).sentenceAdjustments.filter(it => it.type === 'REMAND' && it.active)
+        const nomisAdjustments = await this.prisonerService.getBookingAndSentenceAdjustments(bookingId, token)
+        const nomisRemand = nomisAdjustments.sentenceAdjustments.filter(it => it.type === 'REMAND')
+        const nomisUnusedRemand = nomisAdjustments.sentenceAdjustments.filter(it => it.type === 'UNUSED_REMAND')
         const courtDates = await this.prisonerService.getCourtDateResults(nomsId, token)
 
         try {
           const calculatedRemand = await this.warrantFolderService.calculateRelevantRemand(nomsId, token)
 
-          csvData.push(this.addRow(nomsId, bookingId, prisonDetails, nomisRemand, courtDates, calculatedRemand))
+          csvData.push(
+            this.addRow(nomsId, bookingId, prisonDetails, nomisRemand, nomisUnusedRemand, courtDates, calculatedRemand)
+          )
         } catch (ex) {
           csvData.push(
-            this.addRow(nomsId, bookingId, prisonDetails, nomisRemand, courtDates, null, ex, 'Error calculating remand')
+            this.addRow(
+              nomsId,
+              bookingId,
+              prisonDetails,
+              nomisRemand,
+              nomisUnusedRemand,
+              courtDates,
+              null,
+              ex,
+              'Error calculating remand'
+            )
           )
         }
       } catch (ex) {
-        csvData.push(this.addRow(nomsId, null, null, null, null, null, ex, 'Error fetching data from prison-api'))
+        csvData.push(this.addRow(nomsId, null, null, null, null, null, null, ex, 'Error fetching data from prison-api'))
       }
     }
     return csvData
@@ -53,13 +65,15 @@ export default class BulkRemandCalculationService {
     nomsId: string,
     bookingId: number,
     prisoner: PrisonApiPrisoner,
-    nomisAdjustments: PrisonApiSentenceAdjustments[],
+    nomisRemandSentenceAdjustment: PrisonApiSentenceAdjustments[],
+    nomisUnusedRemandSentenceAdjustment: PrisonApiSentenceAdjustments[],
     courtDates: PrisonApiCourtDateResult[],
     calculatedRemand: RemandResult,
     ex?: unknown,
     errorText?: string
   ): BulkRemandCalculationRow {
-    const nomisRemand = this.sentenceAdjustmentToRemand(nomisAdjustments)
+    const nomisRemand = this.sentenceAdjustmentToRemand(nomisRemandSentenceAdjustment)
+    const nomisUnusedRemand = this.sentenceAdjustmentToRemand(nomisUnusedRemandSentenceAdjustment)
     return {
       NOMS_ID: nomsId,
       ACTIVE_BOOKING_ID: bookingId,
@@ -67,9 +81,11 @@ export default class BulkRemandCalculationService {
       COURT_DATES_JSON: JSON.stringify(courtDates),
       CALCULATED_ALL_JSON: JSON.stringify(calculatedRemand),
       NOMIS_REMAND_DAYS: this.sumRemandDays(nomisRemand),
+      NOMIS_UNUSED_REMAND_DAYS: this.sumRemandDays(nomisUnusedRemand),
       CALCULATED_REMAND_DAYS: this.sumRemandDays(calculatedRemand?.finalRemand),
       NOMIS_REMAND_JSON: JSON.stringify(nomisRemand),
-      CALCULATED_REMAND_JSON: JSON.stringify(calculatedRemand),
+      NOMIS_UNUSED_REMAND_JSON: JSON.stringify(nomisUnusedRemand),
+      CALCULATED_REMAND_JSON: JSON.stringify(calculatedRemand?.finalRemand),
       IS_REMAND_SAME: this.isRemandSame(nomisRemand, calculatedRemand?.finalRemand) ? 'Y' : 'N',
       IS_DATES_SAME: this.isDatesSame(nomisRemand, calculatedRemand?.finalRemand) ? 'Y' : 'N',
       IS_DAYS_SAME: this.isDaysSame(nomisRemand, calculatedRemand?.finalRemand) ? 'Y' : 'N',
