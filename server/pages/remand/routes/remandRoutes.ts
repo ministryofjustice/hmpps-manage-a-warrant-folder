@@ -20,7 +20,11 @@ export default class RemandRoutes {
 
     const nomisRemand = (
       await this.prisonerService.getBookingAndSentenceAdjustments(prisonerDetail.bookingId, token)
-    ).sentenceAdjustments.filter(it => it.type === 'REMAND')
+    ).sentenceAdjustments
+      .filter(it => it.type === 'REMAND')
+      .map(it => {
+        return { ...it, bookingId: prisonerDetail.bookingId }
+      })
 
     const relevantRemand = await this.warrantFolderService.calculateRelevantRemand(nomsId, token)
 
@@ -34,7 +38,7 @@ export default class RemandRoutes {
   }
 
   public submitRemand: RequestHandler = async (req, res): Promise<void> => {
-    const { caseloads, token } = res.locals.user
+    const { token } = res.locals.user
     const { nomsId } = req.params
 
     const relevantRemand = (await this.warrantFolderService.calculateRelevantRemand(nomsId, token)).finalRemand
@@ -46,9 +50,7 @@ export default class RemandRoutes {
       sequence: relevantRemand[0].sentence,
     }
 
-    const prisonerDetail = await this.prisonerService.getPrisonerDetail(nomsId, caseloads, token)
-
-    await this.prisonerService.createAdjustment(prisonerDetail.bookingId, adjustment, token)
+    await this.prisonerService.createAdjustment(relevantRemand[0].bookingId, adjustment, token)
 
     return res.redirect(`/remand/${nomsId}`)
   }

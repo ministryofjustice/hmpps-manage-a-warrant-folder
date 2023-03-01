@@ -25,6 +25,8 @@ export interface components {
       /** Format: int32 */
       sentence: number
       /** Format: int64 */
+      bookingId: number
+      /** Format: int64 */
       days: number
     }
     RemandPeriod: {

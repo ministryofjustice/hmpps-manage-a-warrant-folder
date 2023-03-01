@@ -63,12 +63,8 @@
                 {% for remand in model.relevantRemand.finalRemand %}
                     <dl class="govuk-summary-list">
                         <div class="govuk-summary-list__row">
-                            <dt class="govuk-summary-list__key">From</dt>
-                            <dd class="govuk-summary-list__value">{{remand.from | date('dddd, DD MMMM YYYY') }}</dd>
-                        </div>
-                        <div class="govuk-summary-list__row">
-                            <dt class="govuk-summary-list__key">To</dt>
-                            <dd class="govuk-summary-list__value">{{remand.to | date('dddd, DD MMMM YYYY') }}</dd>
+                            <dt class="govuk-summary-list__key">Dates</dt>
+                            <dd class="govuk-summary-list__value">From {{remand.from | date('dddd, DD MMMM YYYY') }} to {{remand.to | date('dddd, DD MMMM YYYY') }}</dd>
                         </div>
                         <div class="govuk-summary-list__row">
                             <dt class="govuk-summary-list__key">Days</dt>
@@ -76,7 +72,7 @@
                         </div>
                         <div class="govuk-summary-list__row">
                             <dt class="govuk-summary-list__key">Applies to sentence</dt>
-                            <dd class="govuk-summary-list__value">{{remand.sentence}}</dd>
+                            <dd class="govuk-summary-list__value">Booking ID: {{remand.bookingId}}, Sequence: {{remand.sentence}}</dd>
                         </div>
                     </dl>
                 {% endfor %}
@@ -103,12 +99,8 @@
                 {% for remand in model.nomisRemand %}
                     <dl class="govuk-summary-list">
                         <div class="govuk-summary-list__row">
-                            <dt class="govuk-summary-list__key">From</dt>
-                            <dd class="govuk-summary-list__value">{{remand.fromDate | date('dddd, DD MMMM YYYY') }}</dd>
-                        </div>
-                        <div class="govuk-summary-list__row">
-                            <dt class="govuk-summary-list__key">To</dt>
-                            <dd class="govuk-summary-list__value">{{remand.toDate | date('dddd, DD MMMM YYYY') }}</dd>
+                            <dt class="govuk-summary-list__key">Dates</dt>
+                            <dd class="govuk-summary-list__value">From {{remand.fromDate | date('dddd, DD MMMM YYYY') }} to {{remand.toDate | date('dddd, DD MMMM YYYY') }}</dd>
                         </div>
                         <div class="govuk-summary-list__row">
                             <dt class="govuk-summary-list__key">Days</dt>
@@ -116,7 +108,7 @@
                         </div>
                         <div class="govuk-summary-list__row">
                             <dt class="govuk-summary-list__key">Applies to sentence</dt>
-                            <dd class="govuk-summary-list__value">{{remand.sentenceSequence}}</dd>
+                            <dd class="govuk-summary-list__value">Booking ID: {{remand.bookingId}}, Sequence: {{remand.sentence}}</dd>
                         </div>
                     </dl>
                 {% endfor %}
