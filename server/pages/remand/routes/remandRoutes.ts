@@ -38,7 +38,7 @@ export default class RemandRoutes {
   }
 
   public submitRemand: RequestHandler = async (req, res): Promise<void> => {
-    const { caseloads, token } = res.locals.user
+    const { token } = res.locals.user
     const { nomsId } = req.params
 
     const relevantRemand = (await this.warrantFolderService.calculateRelevantRemand(nomsId, token)).finalRemand
