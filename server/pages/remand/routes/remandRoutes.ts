@@ -16,7 +16,7 @@ export default class RemandRoutes {
     const { caseloads, token } = res.locals.user
     const { nomsId } = req.params
 
-    const prisonerDetail = await this.prisonerService.getPrisonerDetail(nomsId, caseloads, token)
+    const prisonerDetail = await this.prisonerService.getPrisonerDetailIncludingReleased(nomsId, caseloads, token)
 
     const nomisRemand = (
       await this.prisonerService.getBookingAndSentenceAdjustments(prisonerDetail.bookingId, token)
