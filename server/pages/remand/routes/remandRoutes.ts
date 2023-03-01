@@ -20,7 +20,11 @@ export default class RemandRoutes {
 
     const nomisRemand = (
       await this.prisonerService.getBookingAndSentenceAdjustments(prisonerDetail.bookingId, token)
-    ).sentenceAdjustments.filter(it => it.type === 'REMAND')
+    ).sentenceAdjustments
+      .filter(it => it.type === 'REMAND')
+      .map(it => {
+        return { ...it, bookingId: prisonerDetail.bookingId }
+      })
 
     const relevantRemand = await this.warrantFolderService.calculateRelevantRemand(nomsId, token)
 

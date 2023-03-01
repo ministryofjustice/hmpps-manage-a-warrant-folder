@@ -72,67 +72,79 @@ export default class BulkRemandCalculationService {
     ex?: unknown,
     errorText?: string
   ): BulkRemandCalculationRow {
-    const nomisRemand = this.sentenceAdjustmentToRemand(nomisRemandSentenceAdjustment)
-    const nomisUnusedRemand = this.sentenceAdjustmentToRemand(nomisUnusedRemandSentenceAdjustment)
+    const nomisRemand = this.sentenceAdjustmentToRemand(bookingId, nomisRemandSentenceAdjustment)
+    const nomisUnusedRemand = this.sentenceAdjustmentToRemand(bookingId, nomisUnusedRemandSentenceAdjustment)
     return {
       NOMS_ID: nomsId,
       ACTIVE_BOOKING_ID: bookingId,
       AGENCY_LOCATION_ID: prisoner?.agencyId,
       COURT_DATES_JSON: JSON.stringify(courtDates),
       CALCULATED_ALL_JSON: JSON.stringify(calculatedRemand),
-      NOMIS_REMAND_DAYS: this.sumRemandDays(nomisRemand),
-      NOMIS_UNUSED_REMAND_DAYS: this.sumRemandDays(nomisUnusedRemand),
-      CALCULATED_REMAND_DAYS: this.sumRemandDays(calculatedRemand?.finalRemand),
+      NOMIS_REMAND_DAYS: this.sumRemandDays(bookingId, nomisRemand),
+      NOMIS_UNUSED_REMAND_DAYS: this.sumRemandDays(bookingId, nomisUnusedRemand),
+      CALCULATED_REMAND_DAYS: this.sumRemandDays(bookingId, calculatedRemand?.finalRemand),
       NOMIS_REMAND_JSON: JSON.stringify(nomisRemand),
       NOMIS_UNUSED_REMAND_JSON: JSON.stringify(nomisUnusedRemand),
       CALCULATED_REMAND_JSON: JSON.stringify(calculatedRemand?.finalRemand),
-      IS_REMAND_SAME: this.isRemandSame(nomisRemand, calculatedRemand?.finalRemand) ? 'Y' : 'N',
-      IS_DATES_SAME: this.isDatesSame(nomisRemand, calculatedRemand?.finalRemand) ? 'Y' : 'N',
-      IS_DAYS_SAME: this.isDaysSame(nomisRemand, calculatedRemand?.finalRemand) ? 'Y' : 'N',
+      IS_REMAND_SAME: this.isRemandSame(bookingId, nomisRemand, calculatedRemand?.finalRemand) ? 'Y' : 'N',
+      IS_DATES_SAME: this.isDatesSame(bookingId, nomisRemand, calculatedRemand?.finalRemand) ? 'Y' : 'N',
+      IS_DAYS_SAME: this.isDaysSame(bookingId, nomisRemand, calculatedRemand?.finalRemand) ? 'Y' : 'N',
       ERROR_JSON: JSON.stringify(ex),
       ERROR_TEXT: errorText,
     }
   }
 
-  private isRemandSame(nomisRemand: Remand[], calculatedRemand: Remand[]): boolean {
-    return nomisRemand != null && calculatedRemand != null && sameMembers(nomisRemand, calculatedRemand)
+  private filterForBookingId(bookingId: number, remands: Remand[]): Remand[] {
+    return remands ? remands.filter(it => it.bookingId === bookingId) : remands
   }
 
-  private isDaysSame(nomisRemand: Remand[], calculatedRemand: Remand[]): boolean {
+  private isRemandSame(bookingId: number, nomisRemand: Remand[], calculatedRemand: Remand[]): boolean {
+    return (
+      nomisRemand != null &&
+      calculatedRemand != null &&
+      sameMembers(this.filterForBookingId(bookingId, nomisRemand), this.filterForBookingId(bookingId, calculatedRemand))
+    )
+  }
+
+  private isDaysSame(bookingId: number, nomisRemand: Remand[], calculatedRemand: Remand[]): boolean {
     return (
       nomisRemand != null &&
       calculatedRemand != null &&
       sameMembers(
-        nomisRemand.map(it => {
+        this.filterForBookingId(bookingId, nomisRemand).map(it => {
           return { days: it.days }
         }),
-        calculatedRemand.map(it => {
+        this.filterForBookingId(bookingId, calculatedRemand).map(it => {
           return { days: it.days }
         })
       )
     )
   }
 
-  private isDatesSame(nomisRemand: Remand[], calculatedRemand: Remand[]): boolean {
+  private isDatesSame(bookingId: number, nomisRemand: Remand[], calculatedRemand: Remand[]): boolean {
     return (
       nomisRemand != null &&
       calculatedRemand != null &&
       sameMembers(
-        nomisRemand.map(it => {
+        this.filterForBookingId(bookingId, nomisRemand).map(it => {
           return { from: it.from, to: it.to }
         }),
-        calculatedRemand.map(it => {
+        this.filterForBookingId(bookingId, calculatedRemand).map(it => {
           return { from: it.from, to: it.to }
         })
       )
     )
   }
 
-  private sumRemandDays(remand: Remand[]): number {
-    return remand ? remand.map(a => a.days).reduce((sum, current) => sum + current, 0) : 0
+  private sumRemandDays(bookingId: number, remand: Remand[]): number {
+    return remand
+      ? this.filterForBookingId(bookingId, remand)
+          .map(a => a.days)
+          .reduce((sum, current) => sum + current, 0)
+      : 0
   }
 
-  private sentenceAdjustmentToRemand(sentenceAdjustments: PrisonApiSentenceAdjustments[]): Remand[] {
+  private sentenceAdjustmentToRemand(bookingId: number, sentenceAdjustments: PrisonApiSentenceAdjustments[]): Remand[] {
     return sentenceAdjustments
       ? sentenceAdjustments.map(it => {
           return {
@@ -140,6 +152,7 @@ export default class BulkRemandCalculationService {
             from: it.fromDate,
             to: it.toDate,
             sentence: it.sentenceSequence,
+            bookingId,
           }
         })
       : []
