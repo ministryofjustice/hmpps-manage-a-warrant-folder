@@ -50,9 +50,7 @@ export default class RemandRoutes {
       sequence: relevantRemand[0].sentence,
     }
 
-    const prisonerDetail = await this.prisonerService.getPrisonerDetail(nomsId, caseloads, token)
-
-    await this.prisonerService.createAdjustment(prisonerDetail.bookingId, adjustment, token)
+    await this.prisonerService.createAdjustment(relevantRemand[0].bookingId, adjustment, token)
 
     return res.redirect(`/remand/${nomsId}`)
   }
