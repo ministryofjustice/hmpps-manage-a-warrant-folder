@@ -27,7 +27,7 @@
                                     <b>From {{adjustment.adjustment.fromDate | date('dddd, DD MMMM YYYY') }} to {{adjustment.adjustment.toDate | date('dddd, DD MMMM YYYY') }}</b>
                                 </span>
                             </td>
-                            <td class="govuk-table_ _cell">{{adjustment.adjustment.days}}</td>
+                            <td class="govuk-table__cell">{{adjustment.adjustment.days}}</td>
                             <td class="govuk-table__cell">
                                 <form action="/adjustments/{{model.prisonerDetail.offenderNo}}/delete/{{adjustment.id}}" class="form" method="post">
                                     <a href="/adjustments/{{model.prisonerDetail.offenderNo}}/edit/{{adjustment.id}}" class="govuk-button">Edit</a>
