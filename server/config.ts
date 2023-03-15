@@ -82,6 +82,14 @@ export default {
       },
       agent: new AgentConfig(),
     },
+    adjustments: {
+      url: get('ADJUSTMENTS_API_URL', 'http://localhost:8080', requiredInProduction),
+      timeout: {
+        response: get('ADJUSTMENTS_API_TIMEOUT_RESPONSE', 10000),
+        deadline: get('ADJUSTMENTS_API_TIMEOUT_DEADLINE', 10000),
+      },
+      agent: new AgentConfig(),
+    },
   },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
 }

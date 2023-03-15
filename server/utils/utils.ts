@@ -35,3 +35,23 @@ export const deepEqual = <T>(x: T, y: T): boolean => {
     ? ok(x).length === ok(y).length && ok(x).every(key => deepEqual(x[key], y[key]))
     : x === y
 }
+
+export const dateItems = (year: string, month: string, day: string) => {
+  return [
+    {
+      name: 'day',
+      classes: 'govuk-input--width-2',
+      value: day,
+    },
+    {
+      name: 'month',
+      classes: 'govuk-input--width-2',
+      value: month,
+    },
+    {
+      name: 'year',
+      classes: 'govuk-input--width-4',
+      value: year,
+    },
+  ]
+}

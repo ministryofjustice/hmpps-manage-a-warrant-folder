@@ -18,7 +18,7 @@ export default function routes(service: Services): Router {
   const courtRoutes = new CourtRoutes(service.prisonerService, service.warrantFormDataService)
   const chargeRoutes = new ChargeRoutes(service.prisonerService, service.warrantFormDataService)
   const sentenceRoutes = new SentenceRoutes(service.prisonerService, service.warrantFormDataService)
-  const adjustmentRoutes = new AdjustmentRoutes(service.prisonerService)
+  const adjustmentRoutes = new AdjustmentRoutes(service.prisonerService, service.adjustmentsService)
   const remandRoutes = new RemandRoutes(
     service.prisonerService,
     service.warrantFolderService,
@@ -45,8 +45,12 @@ export default function routes(service: Services): Router {
   get('/sentences/:nomsId', sentenceRoutes.sentenceDetails)
   post('/sentences/:nomsId', sentenceRoutes.submitSentenceDetails)
 
-  get('/adjustments/:nomsId', adjustmentRoutes.adjustmentDetails)
-  post('/adjustments/:nomsId', adjustmentRoutes.submitAdjustment)
+  get('/adjustments/:nomsId', adjustmentRoutes.list)
+  get('/adjustments/:nomsId/create', adjustmentRoutes.create)
+  get('/adjustments/:nomsId/edit/:adjustmentId', adjustmentRoutes.update)
+  post('/adjustments/:nomsId/create', adjustmentRoutes.submitAdjustment)
+  post('/adjustments/:nomsId/edit/:adjustmentId', adjustmentRoutes.submitAdjustment)
+  post('/adjustments/:nomsId/delete/:adjustmentId', adjustmentRoutes.deleteAdjustment)
 
   return router
 }

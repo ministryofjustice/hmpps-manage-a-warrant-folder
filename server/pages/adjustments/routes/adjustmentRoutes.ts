@@ -1,12 +1,31 @@
 import { RequestHandler } from 'express'
-import { PrisonApiAdjustment } from '../../../@types/prisonApi/prisonClientTypes'
+import AdjustmentsService from '../../../services/adjustmentsService'
 import PrisonerService from '../../../services/prisonerService'
+import AdjustmentForm from '../data/adjustmentForm'
 import adjustmentTypes from '../data/adjustmentTypes'
 
 export default class AdjustmentRoutes {
-  constructor(private readonly prisonerService: PrisonerService) {}
+  constructor(
+    private readonly prisonerService: PrisonerService,
+    private readonly adjustmentsService: AdjustmentsService
+  ) {}
 
-  public adjustmentDetails: RequestHandler = async (req, res): Promise<void> => {
+  public list: RequestHandler = async (req, res): Promise<void> => {
+    const { caseloads, token } = res.locals.user
+    const { nomsId } = req.params
+
+    const prisonerDetail = await this.prisonerService.getPrisonerDetail(nomsId, caseloads, token)
+    const adjustments = await this.adjustmentsService.findByPerson(nomsId, token)
+
+    return res.render('pages/adjustments/list', {
+      model: {
+        prisonerDetail,
+        adjustments,
+      },
+    })
+  }
+
+  public create: RequestHandler = async (req, res): Promise<void> => {
     const { caseloads, token } = res.locals.user
     const { nomsId } = req.params
 
@@ -16,26 +35,49 @@ export default class AdjustmentRoutes {
       model: {
         prisonerDetail,
         adjustmentTypes,
+        adjustment: new AdjustmentForm({}),
+      },
+    })
+  }
+
+  public update: RequestHandler = async (req, res): Promise<void> => {
+    const { caseloads, token } = res.locals.user
+    const { nomsId, adjustmentId } = req.params
+
+    const prisonerDetail = await this.prisonerService.getPrisonerDetail(nomsId, caseloads, token)
+    const adjustment = await this.adjustmentsService.get(adjustmentId, token)
+
+    return res.render('pages/adjustments/form', {
+      model: {
+        prisonerDetail,
+        adjustmentTypes,
+        adjustment: AdjustmentForm.fromAdjustment(adjustment),
       },
     })
   }
 
   public submitAdjustment: RequestHandler = async (req, res): Promise<void> => {
     const { caseloads, token } = res.locals.user
-    const { nomsId } = req.params
-
-    const adjustment: PrisonApiAdjustment = {
-      from: `${req.body['adjustment-from-year']}-${req.body['adjustment-from-month']}-${req.body['adjustment-from-day']}`,
-      to: `${req.body['adjustment-to-year']}-${req.body['adjustment-to-month']}-${req.body['adjustment-to-day']}`,
-      type: req.body['adjustment-type'],
-      days: Number(req.body['number-of-days']),
-      sequence: req.body.sentence ? Number(req.body.sentence) : null,
-    }
+    const { nomsId, adjustmentId } = req.params
 
     const prisonerDetail = await this.prisonerService.getPrisonerDetail(nomsId, caseloads, token)
+    const adjustmentForm = new AdjustmentForm(req.body)
+    const adjustment = adjustmentForm.toAdjustmentDetails(prisonerDetail.bookingId, nomsId)
 
-    await this.prisonerService.createAdjustment(prisonerDetail.bookingId, adjustment, token)
+    if (adjustmentId) {
+      await this.adjustmentsService.update(adjustmentId, adjustment, token)
+    } else {
+      await this.adjustmentsService.create(adjustment, token)
+    }
 
-    return res.redirect(`/`)
+    return res.redirect(`/adjustments/${nomsId}`)
+  }
+
+  public deleteAdjustment: RequestHandler = async (req, res): Promise<void> => {
+    const { token } = res.locals.user
+    const { nomsId, adjustmentId } = req.params
+
+    await this.adjustmentsService.delete(adjustmentId, token)
+    return res.redirect(`/adjustments/${nomsId}`)
   }
 }

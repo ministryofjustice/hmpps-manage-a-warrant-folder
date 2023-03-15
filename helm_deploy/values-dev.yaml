@@ -13,6 +13,7 @@ generic-service:
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api-dev.prison.service.justice.gov.uk"
     WARRANT_FOLDER_URL: "https://manage-a-warrant-folder-api-dev.hmpps.service.justice.gov.uk"
     PRISON_API_URL: "https://api-dev.prison.service.justice.gov.uk"
+    ADJUSTMENTS_API_URL: "https://adjustments-api-dev.hmpps.service.justice.gov.uk"
 
   # Switches off the allow list in the DEV env only.
   allowlist: null

@@ -1,48 +1,36 @@
 type AdjustmentType = {
-  code: string
-  description: string
+  value: string
+  text: string
 }
 
 const adjustmentTypes: AdjustmentType[] = [
   {
-    code: 'REMAND',
-    description: 'Remand',
+    value: 'REMAND',
+    text: 'Remand',
   } as AdjustmentType,
   {
-    code: 'UNUSED_REMAND',
-    description: 'Unused remand',
+    value: 'TAGGED_BAIL',
+    text: 'Tagged bail',
   } as AdjustmentType,
   {
-    code: 'RECALL_SENTENCE_TAGGED_BAIL',
-    description: 'Recall tagged bail',
+    value: 'LAWFULLY_AT_LARGE',
+    text: 'Lawfully at large',
   } as AdjustmentType,
   {
-    code: 'TAGGED_BAIL',
-    description: 'Tagged bail',
+    value: 'UNLAWFULLY_AT_LARGE',
+    text: 'Unlawfully at large',
   } as AdjustmentType,
   {
-    code: 'RECALL_SENTENCE_REMAND',
-    description: 'Recall remand',
+    value: 'RESTORED_ADDITIONAL_DAYS_AWARDED',
+    text: 'Restored additional days awarded',
   } as AdjustmentType,
   {
-    code: 'LAWFULLY_AT_LARGE',
-    description: 'Lawfully at large',
+    value: 'ADDITIONAL_DAYS_AWARDED',
+    text: 'Additional days awarded',
   } as AdjustmentType,
   {
-    code: 'UNLAWFULLY_AT_LARGE',
-    description: 'Unlawfully at large',
-  } as AdjustmentType,
-  {
-    code: 'RESTORED_ADDITIONAL_DAYS_AWARDED',
-    description: 'Restored additional days awarded',
-  } as AdjustmentType,
-  {
-    code: 'ADDITIONAL_DAYS_AWARDED',
-    description: 'Additional days awarded',
-  } as AdjustmentType,
-  {
-    code: 'SPECIAL_REMISSION',
-    description: 'Special remission',
+    value: 'SPECIAL_REMISSION',
+    text: 'Special remission',
   } as AdjustmentType,
 ]
 
