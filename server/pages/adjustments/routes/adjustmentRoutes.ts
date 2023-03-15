@@ -1,5 +1,4 @@
 import { RequestHandler } from 'express'
-import { AdjustmentDetails } from '../../../@types/adjustments/adjustmentsTypes'
 import AdjustmentsService from '../../../services/adjustmentsService'
 import PrisonerService from '../../../services/prisonerService'
 import AdjustmentForm from '../data/adjustmentForm'
@@ -64,7 +63,6 @@ export default class AdjustmentRoutes {
     const prisonerDetail = await this.prisonerService.getPrisonerDetail(nomsId, caseloads, token)
     const adjustmentForm = new AdjustmentForm(req.body)
     const adjustment = adjustmentForm.toAdjustmentDetails(prisonerDetail.bookingId, nomsId)
-    console.log(JSON.stringify(adjustment))
 
     if (adjustmentId) {
       await this.adjustmentsService.update(adjustmentId, adjustment, token)

@@ -1,5 +1,3 @@
-import WarrantFolderClient from '../api/warrantFolderClient'
-import { RemandResult } from '../@types/warrantFolder/warrantFolderTypes'
 import AdjustmentsClient from '../api/adjustmentsClient'
 import { Adjustment, AdjustmentDetails, CreateResponse } from '../@types/adjustments/adjustmentsTypes'
 
