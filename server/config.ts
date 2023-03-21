@@ -95,6 +95,9 @@ export default {
     calculateReleaseDatesUI: {
       url: get('CALCULATE_RELEASE_DATES_URL', 'http://localhost:8080', requiredInProduction),
     },
+    digitalPrisonServices: {
+      url: get('DIGITAL_PRISON_SERVICES_URL', 'http://localhost:3000/dps', requiredInProduction),
+    },
   },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
 }
