@@ -4,7 +4,8 @@ import { PrisonApiAdjustment } from '../../../@types/prisonApi/prisonClientTypes
 import AdjustmentsService from '../../../services/adjustmentsService'
 import PrisonerService from '../../../services/prisonerService'
 import WarrantFolderService from '../../../services/warrantFolderService'
-import AdjustmentsListViewModel from '../data/adjustmentsListModel'
+import AdjustmentsListViewModel, { Message } from '../data/adjustmentsListModel'
+import adjustmentTypes from '../data/adjustmentTypes'
 
 export default class AdjustmentJourneyRoutes {
   constructor(
@@ -34,10 +35,16 @@ export default class AdjustmentJourneyRoutes {
     const { caseloads, token } = res.locals.user
     const { nomsId } = req.params
     const prisonerDetail = await this.prisonerService.getPrisonerDetail(nomsId, caseloads, token)
-    const adjustments = await this.adjustmentsService.findByPerson(nomsId, token)
+    const adjustments = await this.adjustmentsService.findByPersonAndSource(nomsId, 'DPS', token)
     const relevantRemand = await this.warrantFolderService.calculateRelevantRemand(nomsId, token)
+    const message = req.flash('message')
     return res.render('pages/adjustments/list', {
-      model: new AdjustmentsListViewModel(prisonerDetail, adjustments, relevantRemand.finalRemand),
+      model: new AdjustmentsListViewModel(
+        prisonerDetail,
+        adjustments,
+        relevantRemand.finalRemand,
+        message[0] && (JSON.parse(message[0]) as Message)
+      ),
     })
   }
 
@@ -87,6 +94,13 @@ export default class AdjustmentJourneyRoutes {
     })
     await Promise.all(adjustments.map(it => this.adjustmentsService.create(it, token)))
 
+    req.flash(
+      'message',
+      JSON.stringify({
+        type: adjustmentTypes.find(it => it.value === 'REMAND'),
+        days: relevantRemand.finalRemand.map(it => it.days).reduce((sum, current) => sum + current, 0),
+      } as Message)
+    )
     return res.redirect(`/adjustments/${nomsId}/list`)
   }
 }

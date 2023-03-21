@@ -91,5 +91,10 @@ export default {
       agent: new AgentConfig(),
     },
   },
+  services: {
+    calculateReleaseDatesUI: {
+      url: get('CALCULATE_RELEASE_DATES_URL', 'http://localhost:8080', requiredInProduction),
+    },
+  },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
 }
