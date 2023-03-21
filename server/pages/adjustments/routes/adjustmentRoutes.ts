@@ -17,7 +17,7 @@ export default class AdjustmentRoutes {
     const prisonerDetail = await this.prisonerService.getPrisonerDetail(nomsId, caseloads, token)
     const adjustments = await this.adjustmentsService.findByPerson(nomsId, token)
 
-    return res.render('pages/adjustments/list', {
+    return res.render('pages/adjustments/minimal-list', {
       model: {
         prisonerDetail,
         adjustments,

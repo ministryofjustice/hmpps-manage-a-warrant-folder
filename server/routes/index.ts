@@ -1,6 +1,7 @@
 import { type RequestHandler, Router } from 'express'
 
 import asyncMiddleware from '../middleware/asyncMiddleware'
+import AdjustmentJourneyRoutes from '../pages/adjustments/routes/adjustmentJourneyRoutes'
 import AdjustmentRoutes from '../pages/adjustments/routes/adjustmentRoutes'
 import ChargeRoutes from '../pages/charges/routes/chargeRoutes'
 import CourtRoutes from '../pages/courts/routes/courtRoutes'
@@ -19,6 +20,11 @@ export default function routes(service: Services): Router {
   const chargeRoutes = new ChargeRoutes(service.prisonerService, service.warrantFormDataService)
   const sentenceRoutes = new SentenceRoutes(service.prisonerService, service.warrantFormDataService)
   const adjustmentRoutes = new AdjustmentRoutes(service.prisonerService, service.adjustmentsService)
+  const adjustmentJourneyRoutes = new AdjustmentJourneyRoutes(
+    service.prisonerService,
+    service.warrantFolderService,
+    service.adjustmentsService
+  )
   const remandRoutes = new RemandRoutes(
     service.prisonerService,
     service.warrantFolderService,
@@ -51,6 +57,12 @@ export default function routes(service: Services): Router {
   post('/adjustments/:nomsId/create', adjustmentRoutes.submitAdjustment)
   post('/adjustments/:nomsId/edit/:adjustmentId', adjustmentRoutes.submitAdjustment)
   post('/adjustments/:nomsId/delete/:adjustmentId', adjustmentRoutes.deleteAdjustment)
+
+  get('/adjustments', adjustmentJourneyRoutes.entry)
+  get('/adjustments/:nomsId/start', adjustmentJourneyRoutes.start)
+  get('/adjustments/:nomsId/list', adjustmentJourneyRoutes.list)
+  get('/adjustments/:nomsId/remand', adjustmentJourneyRoutes.remand)
+  post('/adjustments/:nomsId/remand', adjustmentJourneyRoutes.remandSubmit)
 
   return router
 }

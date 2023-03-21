@@ -1,0 +1,99 @@
+{% extends "../../partials/layout.njk" %}
+
+{% set pageTitle = applicationName + " - Home" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <h1 class="govuk-heading-l">
+                <span class="govuk-caption-xl">Adjustments</span>Check remand details for {{model.prisonerDetail.firstName}}
+                {{model.prisonerDetail.lastName}}</h1>
+
+            <p class="govuk-!-margin-bottom-8">Based on the court case information in NOMIS, the following remand has been counted as relevant remand.
+
+                    The rules for applying remand time can be found in <a href="#">the policy framework</a>.</p>
+
+            <article class="moj-ticket-panel govuk-!-margin-bottom-8" aria-label="Sub navigation 1">
+
+                <section class="moj-ticket-panel__content moj-ticket-panel__content--blue" aria-label="Section 1">
+
+                    <table class="govuk-table">
+                        <caption class="govuk-table__caption govuk-table__caption--m">Calculated remand days summary</caption>
+
+                        <tbody class="govuk-table__body">
+                            {% for remand in model.relevantRemand.finalRemand %}
+                                <tr class="govuk-table__row">
+                                    <th scope="row" class="govuk-table__header">From</th>
+                                    <td class="govuk-table__cell">{{remand.from | date('dddd, DD MMMM YYYY') }}</td>
+                                </tr>
+                                <tr class="govuk-table__row">
+                                    <th scope="row" class="govuk-table__header">To</th>
+                                    <td class="govuk-table__cell">{{remand.to | date('dddd, DD MMMM YYYY') }}</td>
+                                </tr>
+                                <tr class="govuk-table__row">
+                                    <th scope="row" class="govuk-table__header">Days</th>
+                                    <td class="govuk-table__cell">{{remand.days}}</td>
+                                </tr>
+                                <tr class="govuk-table__row">
+                                    <th scope="row" class="govuk-table__header">Applies to</th>
+                                    <td class="govuk-table__cell">Abstract water without a licence</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </section>
+
+            </article>
+            <h2 class="govuk-heading-m">Details</h2>
+            <table class="govuk-table govuk-!-margin-bottom-8">
+                <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th class="govuk-table__header" scope="col">Remand periods identified from court events</th>
+                        <th class="govuk-table__header" scope="col">Days</th>
+                        <th class="govuk-table__header" scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                    {% for remand in model.relevantRemand.remandPeriods %}
+
+                        <tr class="govuk-table__row">
+                            <!-- Dates -->
+                            <td class="govuk-table__cell">
+                                <span class="govuk-!-padding-top-3">
+                                    <b>Court case number {{remand.courtCaseRef}}</b>
+                                </span><br>
+                                <span>Court : Wolverhampton crown court</span><br>
+                                <span>Case outcome : Bailed</span><br>
+                                <span class="govuk-hint">{{remand.from | date('dddd, DD MMMM YYYY') }} - {{remand.to | date('dddd, DD MMMM YYYY') }}</span><br>
+                                <ul class="govuk-list">
+                                    <li>{{remand.offenceDescription}}</li>
+                                    <!--                                <li>Possess a firearm without a certificate on 1 Feb 2018</li>-->
+                                    <!--                                <li>Possess knife blade or sharp pointed article on 1 Feb 2018</li>-->
+                                </ul>
+                            </td>
+                            <!-- Days -->
+                            <td class="govuk-table__cell"><br>{{remand.days}}</td>
+                        </tr>
+                    {% endfor %}
+
+                </tr>
+
+            </tbody>
+        </table>
+        <div></div>
+
+        <form class="form" method="post">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+            <div>
+                <button class="govuk-button" data-module="govuk-button" name="submit">Accept and save</button>
+                <a href="/adjustments/{{model.prisonerDetail.offenderNo}}/list" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+                    Cancel
+                </a>
+
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
