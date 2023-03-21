@@ -14,6 +14,8 @@ generic-service:
     WARRANT_FOLDER_URL: "https://manage-a-warrant-folder-api-dev.hmpps.service.justice.gov.uk"
     PRISON_API_URL: "https://api-dev.prison.service.justice.gov.uk"
     ADJUSTMENTS_API_URL: "https://adjustments-api-dev.hmpps.service.justice.gov.uk"
+    CALCULATE_RELEASE_DATES_URL: "https://calculate-release-dates-dev.hmpps.service.justice.gov.uk"
+    DIGITAL_PRISON_SERVICES_URL: "https://digital-dev.prison.service.justice.gov.uk"
 
   # Switches off the allow list in the DEV env only.
   allowlist: null

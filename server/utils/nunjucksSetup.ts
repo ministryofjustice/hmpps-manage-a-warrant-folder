@@ -4,6 +4,7 @@ import express from 'express'
 import * as pathModule from 'path'
 import dayjs from 'dayjs'
 import { initialiseName } from './utils'
+import config from '../config'
 
 const production = process.env.NODE_ENV === 'production'
 
@@ -38,6 +39,8 @@ export default function nunjucksSetup(app: express.Express, path: pathModule.Pla
       express: app,
     }
   )
+
+  njkEnv.addGlobal('digitalPrisonServicesUrl', config.services.digitalPrisonServices.url)
 
   njkEnv.addFilter('initialiseName', initialiseName)
 

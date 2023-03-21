@@ -4,22 +4,77 @@
  */
 
 export interface paths {
+  '/queue-admin/retry-dlq/{dlqName}': {
+    put: operations['retryDlq']
+  }
+  '/queue-admin/retry-all-dlqs': {
+    put: operations['retryAllDlqs']
+  }
+  '/queue-admin/purge-queue/{queueName}': {
+    put: operations['purgeQueue']
+  }
   '/legacy/adjustments/{adjustmentId}': {
+    /**
+     * Get an adjustments
+     * @description Get details of an adjustment in the NOMIS system format.
+     */
     get: operations['get']
+    /**
+     * Update an adjustments
+     * @description Synchronise an update from NOMIS into adjustments API.
+     */
     put: operations['update']
+    /**
+     * Delete an adjustments
+     * @description Synchronise a deletion from NOMIS into adjustments API.
+     */
     delete: operations['delete']
   }
   '/adjustments/{adjustmentId}': {
+    /**
+     * Get an adjustments
+     * @description Get details of an adjustment
+     */
     get: operations['get_1']
+    /**
+     * Update an adjustments
+     * @description Update an adjustment.
+     */
     put: operations['update_1']
+    /**
+     * Delete an adjustments
+     * @description Delete an adjustment.
+     */
     delete: operations['delete_1']
   }
   '/legacy/adjustments': {
+    /**
+     * Create an adjustments
+     * @description Synchronise a creation from NOMIS into adjustments API.
+     */
     post: operations['create']
   }
+  '/legacy/adjustments/migration': {
+    /**
+     * Create an adjustment from the migration job
+     * @description Synchronise a creation from NOMIS into adjustments API. This endpoint is used for initial migration of data from NOMIS without raising any events.
+     */
+    post: operations['migration']
+  }
   '/adjustments': {
+    /**
+     * Get adjustments
+     * @description Get adjustments for a given person.
+     */
     get: operations['findByPerson']
+    /**
+     * Create an adjustments
+     * @description Create an adjustment.
+     */
     post: operations['create_1']
+  }
+  '/queue-admin/get-dlq-messages/{dlqName}': {
+    get: operations['getDlqMessages']
   }
 }
 
@@ -27,30 +82,120 @@ export type webhooks = Record<string, never>
 
 export interface components {
   schemas: {
+    Message: {
+      messageId?: string
+      receiptHandle?: string
+      body?: string
+      attributes?: {
+        [key: string]: string | undefined
+      }
+      messageAttributes?: {
+        [key: string]: components['schemas']['MessageAttributeValue'] | undefined
+      }
+      md5OfBody?: string
+      md5OfMessageAttributes?: string
+    }
+    MessageAttributeValue: {
+      stringValue?: string
+      binaryValue?: {
+        /** Format: int32 */
+        short?: number
+        char?: string
+        /** Format: int32 */
+        int?: number
+        /** Format: int64 */
+        long?: number
+        /** Format: float */
+        float?: number
+        /** Format: double */
+        double?: number
+        direct?: boolean
+        readOnly?: boolean
+      }
+      stringListValues?: string[]
+      binaryListValues?: {
+        /** Format: int32 */
+        short?: number
+        char?: string
+        /** Format: int32 */
+        int?: number
+        /** Format: int64 */
+        long?: number
+        /** Format: float */
+        float?: number
+        /** Format: double */
+        double?: number
+        direct?: boolean
+        readOnly?: boolean
+      }[]
+      dataType?: string
+    }
+    RetryDlqResult: {
+      /** Format: int32 */
+      messagesFoundCount: number
+      messages: components['schemas']['Message'][]
+    }
+    PurgeQueueResult: {
+      /** Format: int32 */
+      messagesFoundCount: number
+    }
+    /** @description An adjustment structured for synchronising with the NOMIS system */
     LegacyAdjustment: {
-      /** Format: int64 */
+      /**
+       * Format: int64
+       * @description The NOMIS booking ID of the adjustment
+       */
       bookingId: number
-      /** Format: int32 */
+      /**
+       * Format: int32
+       * @description The NOMIS sentence sequence of the adjustment
+       */
       sentenceSequence?: number
-      offenderId: string
-      /** @enum {string} */
+      /** @description The NOMIS offender number aka nomsId, prisonerId of the person this adjustment applies to */
+      offenderNo: string
+      /**
+       * @description The NOMIS adjustment type
+       * @enum {string}
+       */
       adjustmentType: 'ADA' | 'RADA' | 'UAL' | 'LAL' | 'SREM' | 'RSR' | 'RST' | 'RX' | 'S240A' | 'UR'
-      /** Format: date */
+      /**
+       * Format: date
+       * @description The NOMIS date of adjustment
+       */
       adjustmentDate?: string
-      /** Format: date */
+      /**
+       * Format: date
+       * @description The NOMIS from date of adjustment
+       */
       adjustmentFromDate?: string
-      /** Format: int32 */
+      /**
+       * Format: int32
+       * @description The NOMIS adjustment days
+       */
       adjustmentDays: number
+      /** @description The NOMIS comment for this adjustment */
       comment?: string
+      /** @description The NOMIS active or inactive flag */
       active: boolean
     }
+    /** @description The details of an adjustment to release dates */
     AdjustmentDetailsDto: {
-      /** Format: int64 */
+      /**
+       * Format: int64
+       * @description The NOMIS booking ID of the adjustment
+       */
       bookingId: number
-      /** Format: int32 */
+      /**
+       * Format: int32
+       * @description The NOMIS sentence sequence of the adjustment
+       */
       sentenceSequence?: number
+      /** @description The NOMIS ID of the person this adjustment applies to */
       person: string
-      /** @enum {string} */
+      /**
+       * @description The type of adjustment
+       * @enum {string}
+       */
       adjustmentType:
         | 'REMAND'
         | 'TAGGED_BAIL'
@@ -59,11 +204,20 @@ export interface components {
         | 'ADDITIONAL_DAYS_AWARDED'
         | 'RESTORATION_OF_ADDITIONAL_DAYS_AWARDED'
         | 'SPECIAL_REMISSION'
-      /** Format: date */
+      /**
+       * Format: date
+       * @description The end date of the adjustment
+       */
       toDate?: string
-      /** Format: date */
+      /**
+       * Format: date
+       * @description The start date of the adjustment
+       */
       fromDate: string
-      /** Format: int32 */
+      /**
+       * Format: int32
+       * @description The number of adjustment days
+       */
       days?: number
     }
     LegacyAdjustmentCreatedResponse: {
@@ -74,8 +228,25 @@ export interface components {
       /** Format: uuid */
       adjustmentId: string
     }
+    DlqMessage: {
+      body: {
+        [key: string]: Record<string, never> | undefined
+      }
+      messageId: string
+    }
+    GetDlqResult: {
+      /** Format: int32 */
+      messagesFoundCount: number
+      /** Format: int32 */
+      messagesReturnedCount: number
+      messages: components['schemas']['DlqMessage'][]
+    }
+    /** @description The adjustment and its identifier */
     AdjustmentDto: {
-      /** Format: uuid */
+      /**
+       * Format: uuid
+       * @description The ID of the adjustment
+       */
       id: string
       adjustment: components['schemas']['AdjustmentDetailsDto']
     }
@@ -90,15 +261,72 @@ export interface components {
 export type external = Record<string, never>
 
 export interface operations {
-  get: {
+  retryDlq: {
     parameters: {
       path: {
-        adjustmentId: string
+        dlqName: string
       }
     }
     responses: {
       /** @description OK */
       200: {
+        content: {
+          '*/*': components['schemas']['RetryDlqResult']
+        }
+      }
+    }
+  }
+  retryAllDlqs: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          '*/*': components['schemas']['RetryDlqResult'][]
+        }
+      }
+    }
+  }
+  purgeQueue: {
+    parameters: {
+      path: {
+        queueName: string
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          '*/*': components['schemas']['PurgeQueueResult']
+        }
+      }
+    }
+  }
+  get: {
+    /**
+     * Get an adjustments
+     * @description Get details of an adjustment in the NOMIS system format.
+     */
+    parameters: {
+      /** @description The adjustment UUID */
+      path: {
+        adjustmentId: string
+      }
+    }
+    responses: {
+      /** @description Adjustment found */
+      200: {
+        content: {
+          'application/json': components['schemas']['LegacyAdjustment']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['LegacyAdjustment']
+        }
+      }
+      /** @description Adjustment not found */
+      404: {
         content: {
           'application/json': components['schemas']['LegacyAdjustment']
         }
@@ -106,7 +334,12 @@ export interface operations {
     }
   }
   update: {
+    /**
+     * Update an adjustments
+     * @description Synchronise an update from NOMIS into adjustments API.
+     */
     parameters: {
+      /** @description The adjustment UUID */
       path: {
         adjustmentId: string
       }
@@ -117,30 +350,60 @@ export interface operations {
       }
     }
     responses: {
-      /** @description OK */
+      /** @description Adjustment update */
       200: never
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: never
+      /** @description Adjustment not found */
+      404: never
     }
   }
   delete: {
+    /**
+     * Delete an adjustments
+     * @description Synchronise a deletion from NOMIS into adjustments API.
+     */
     parameters: {
+      /** @description The adjustment UUID */
       path: {
         adjustmentId: string
       }
     }
     responses: {
-      /** @description OK */
+      /** @description Adjustment deleted */
       200: never
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: never
+      /** @description Adjustment not found */
+      404: never
     }
   }
   get_1: {
+    /**
+     * Get an adjustments
+     * @description Get details of an adjustment
+     */
     parameters: {
+      /** @description The adjustment UUID */
       path: {
         adjustmentId: string
       }
     }
     responses: {
-      /** @description OK */
+      /** @description Adjustment found */
       200: {
+        content: {
+          'application/json': components['schemas']['AdjustmentDetailsDto']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['AdjustmentDetailsDto']
+        }
+      }
+      /** @description Adjustment not found */
+      404: {
         content: {
           'application/json': components['schemas']['AdjustmentDetailsDto']
         }
@@ -148,7 +411,12 @@ export interface operations {
     }
   }
   update_1: {
+    /**
+     * Update an adjustments
+     * @description Update an adjustment.
+     */
     parameters: {
+      /** @description The adjustment UUID */
       path: {
         adjustmentId: string
       }
@@ -159,30 +427,78 @@ export interface operations {
       }
     }
     responses: {
-      /** @description OK */
+      /** @description Adjustment update */
       200: never
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: never
+      /** @description Adjustment not found */
+      404: never
     }
   }
   delete_1: {
+    /**
+     * Delete an adjustments
+     * @description Delete an adjustment.
+     */
     parameters: {
+      /** @description The adjustment UUID */
       path: {
         adjustmentId: string
       }
     }
     responses: {
-      /** @description OK */
+      /** @description Adjustment deleted */
       200: never
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: never
+      /** @description Adjustment not found */
+      404: never
     }
   }
   create: {
+    /**
+     * Create an adjustments
+     * @description Synchronise a creation from NOMIS into adjustments API.
+     */
     requestBody: {
       content: {
         'application/vnd.nomis-offence+json': components['schemas']['LegacyAdjustment']
       }
     }
     responses: {
-      /** @description Created */
+      /** @description Adjustment created */
       201: {
+        content: {
+          'application/json': components['schemas']['LegacyAdjustmentCreatedResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['LegacyAdjustmentCreatedResponse']
+        }
+      }
+    }
+  }
+  migration: {
+    /**
+     * Create an adjustment from the migration job
+     * @description Synchronise a creation from NOMIS into adjustments API. This endpoint is used for initial migration of data from NOMIS without raising any events.
+     */
+    requestBody: {
+      content: {
+        'application/vnd.nomis-offence+json': components['schemas']['LegacyAdjustment']
+      }
+    }
+    responses: {
+      /** @description Adjustment created */
+      201: {
+        content: {
+          'application/json': components['schemas']['LegacyAdjustmentCreatedResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
         content: {
           'application/json': components['schemas']['LegacyAdjustmentCreatedResponse']
         }
@@ -190,14 +506,31 @@ export interface operations {
     }
   }
   findByPerson: {
+    /**
+     * Get adjustments
+     * @description Get adjustments for a given person.
+     */
     parameters: {
+      /** @description The noms ID of the person */
       query: {
         person: string
       }
     }
     responses: {
-      /** @description OK */
+      /** @description Adjustment found */
       200: {
+        content: {
+          'application/json': components['schemas']['AdjustmentDto'][]
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['AdjustmentDto'][]
+        }
+      }
+      /** @description Adjustment not found */
+      404: {
         content: {
           'application/json': components['schemas']['AdjustmentDto'][]
         }
@@ -205,16 +538,44 @@ export interface operations {
     }
   }
   create_1: {
+    /**
+     * Create an adjustments
+     * @description Create an adjustment.
+     */
     requestBody: {
       content: {
         'application/json': components['schemas']['AdjustmentDetailsDto']
       }
     }
     responses: {
-      /** @description Created */
+      /** @description Adjustment created */
       201: {
         content: {
           'application/json': components['schemas']['CreateResponseDto']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['CreateResponseDto']
+        }
+      }
+    }
+  }
+  getDlqMessages: {
+    parameters: {
+      query?: {
+        maxMessages?: number
+      }
+      path: {
+        dlqName: string
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          '*/*': components['schemas']['GetDlqResult']
         }
       }
     }

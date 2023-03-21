@@ -17,6 +17,10 @@ export default class AdjustmentsClient {
     return this.restClient.get({ path: `/adjustments?person=${person}` }) as Promise<Adjustment[]>
   }
 
+  async findByPersonAndSource(person: string, source: 'DPS' | 'NOMIS'): Promise<Adjustment[]> {
+    return this.restClient.get({ path: `/adjustments?person=${person}&source=${source}` }) as Promise<Adjustment[]>
+  }
+
   async create(adjustment: AdjustmentDetails): Promise<CreateResponse> {
     return this.restClient.post({ path: `/adjustments`, data: adjustment }) as Promise<CreateResponse>
   }
