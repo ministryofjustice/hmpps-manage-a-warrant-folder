@@ -42,7 +42,7 @@ export default class AdjustmentJourneyRoutes {
       model: new AdjustmentsListViewModel(
         prisonerDetail,
         adjustments,
-        relevantRemand.finalRemand,
+        relevantRemand.sentenceRemand,
         message[0] && (JSON.parse(message[0]) as Message)
       ),
     })
@@ -53,6 +53,7 @@ export default class AdjustmentJourneyRoutes {
     const { nomsId } = req.params
     const prisonerDetail = await this.prisonerService.getPrisonerDetail(nomsId, caseloads, token)
     const relevantRemand = await this.warrantFolderService.calculateRelevantRemand(nomsId, token)
+    console.log(JSON.stringify(relevantRemand, null, 2))
     return res.render('pages/adjustments/remand', {
       model: {
         prisonerDetail,
@@ -66,29 +67,29 @@ export default class AdjustmentJourneyRoutes {
     const { nomsId } = req.params
     const relevantRemand = await this.warrantFolderService.calculateRelevantRemand(nomsId, token)
 
-    const nomisAdjustments: PrisonApiAdjustment[] = relevantRemand.finalRemand.map(it => {
+    const nomisAdjustments: PrisonApiAdjustment[] = relevantRemand.sentenceRemand.map(it => {
       return {
         from: it.from,
         to: it.to,
         type: 'REMAND',
         days: it.days,
-        sequence: it.sentence,
+        sequence: it.charge.sentenceSequence,
       }
     })
     await Promise.all(
       nomisAdjustments.map(it =>
-        this.prisonerService.createAdjustment(relevantRemand.finalRemand[0].bookingId, it, token)
+        this.prisonerService.createAdjustment(relevantRemand.sentenceRemand[0].charge.bookingId, it, token)
       )
     )
 
-    const adjustments: AdjustmentDetails[] = relevantRemand.finalRemand.map(it => {
+    const adjustments: AdjustmentDetails[] = relevantRemand.sentenceRemand.map(it => {
       return {
         fromDate: it.from,
         toDate: it.to,
         adjustmentType: 'REMAND',
         days: it.days,
-        sentenceSequence: it.sentence,
-        bookingId: it.bookingId,
+        sentenceSequence: it.charge.sentenceSequence,
+        bookingId: it.charge.bookingId,
         person: nomsId,
       } as AdjustmentDetails
     })
@@ -98,7 +99,7 @@ export default class AdjustmentJourneyRoutes {
       'message',
       JSON.stringify({
         type: adjustmentTypes.find(it => it.value === 'REMAND'),
-        days: relevantRemand.finalRemand.map(it => it.days).reduce((sum, current) => sum + current, 0),
+        days: relevantRemand.sentenceRemand.map(it => it.days).reduce((sum, current) => sum + current, 0),
       } as Message)
     )
     return res.redirect(`/adjustments/${nomsId}/list`)

@@ -82,20 +82,20 @@ export default class BulkRemandCalculationService {
       CALCULATED_ALL_JSON: JSON.stringify(calculatedRemand),
       NOMIS_REMAND_DAYS: this.sumRemandDays(bookingId, nomisRemand),
       NOMIS_UNUSED_REMAND_DAYS: this.sumRemandDays(bookingId, nomisUnusedRemand),
-      CALCULATED_REMAND_DAYS: this.sumRemandDays(bookingId, calculatedRemand?.finalRemand),
+      CALCULATED_REMAND_DAYS: this.sumRemandDays(bookingId, calculatedRemand?.sentenceRemand),
       NOMIS_REMAND_JSON: JSON.stringify(nomisRemand),
       NOMIS_UNUSED_REMAND_JSON: JSON.stringify(nomisUnusedRemand),
-      CALCULATED_REMAND_JSON: JSON.stringify(calculatedRemand?.finalRemand),
-      IS_REMAND_SAME: this.isRemandSame(bookingId, nomisRemand, calculatedRemand?.finalRemand) ? 'Y' : 'N',
-      IS_DATES_SAME: this.isDatesSame(bookingId, nomisRemand, calculatedRemand?.finalRemand) ? 'Y' : 'N',
-      IS_DAYS_SAME: this.isDaysSame(bookingId, nomisRemand, calculatedRemand?.finalRemand) ? 'Y' : 'N',
+      CALCULATED_REMAND_JSON: JSON.stringify(calculatedRemand?.sentenceRemand),
+      IS_REMAND_SAME: this.isRemandSame(bookingId, nomisRemand, calculatedRemand?.sentenceRemand) ? 'Y' : 'N',
+      IS_DATES_SAME: this.isDatesSame(bookingId, nomisRemand, calculatedRemand?.sentenceRemand) ? 'Y' : 'N',
+      IS_DAYS_SAME: this.isDaysSame(bookingId, nomisRemand, calculatedRemand?.sentenceRemand) ? 'Y' : 'N',
       ERROR_JSON: JSON.stringify(ex),
       ERROR_TEXT: errorText,
     }
   }
 
   private filterForBookingId(bookingId: number, remands: Remand[]): Remand[] {
-    return remands ? remands.filter(it => it.bookingId === bookingId) : remands
+    return remands ? remands.filter(it => it.charge.bookingId === bookingId) : remands
   }
 
   private isRemandSame(bookingId: number, nomisRemand: Remand[], calculatedRemand: Remand[]): boolean {
@@ -151,9 +151,7 @@ export default class BulkRemandCalculationService {
             days: it.numberOfDays,
             from: it.fromDate,
             to: it.toDate,
-            sentence: it.sentenceSequence,
-            bookingId,
-          }
+          } as Remand
         })
       : []
   }

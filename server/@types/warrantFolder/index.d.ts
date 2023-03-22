@@ -17,38 +17,39 @@ export type webhooks = Record<string, never>
 
 export interface components {
   schemas: {
+    Charge: {
+      /** Format: int64 */
+      chargeId: number
+      offence: components['schemas']['Offence']
+      /** Format: date */
+      offenceDate: string
+      /** Format: date */
+      offenceEndDate?: string
+      /** Format: int32 */
+      sentenceSequence?: number
+      /** Format: int64 */
+      bookingId: number
+      courtCaseRef?: string
+      courtLocation?: string
+      resultDescription?: string
+    }
+    Offence: {
+      code: string
+      statute: string
+      description: string
+    }
     Remand: {
       /** Format: date */
       from: string
       /** Format: date */
       to: string
-      /** Format: int32 */
-      sentence: number
-      /** Format: int64 */
-      bookingId: number
-      /** Format: int64 */
-      days: number
-    }
-    RemandPeriod: {
-      /** Format: date */
-      from: string
-      /** Format: date */
-      to: string
-      /** Format: date */
-      offenceDate: string
-      /** Format: date */
-      offenceEndDate?: string
-      offenceCode: string
-      offenceDescription: string
-      courtCaseRef?: string
-      /** Format: int64 */
-      chargeId: number
+      charge: components['schemas']['Charge']
       /** Format: int64 */
       days: number
     }
     RemandResult: {
-      remandPeriods: components['schemas']['RemandPeriod'][]
-      finalRemand: components['schemas']['Remand'][]
+      chargeRemand: components['schemas']['Remand'][]
+      sentenceRemand: components['schemas']['Remand'][]
     }
   }
   responses: never
