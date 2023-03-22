@@ -41,16 +41,16 @@ export default class RemandRoutes {
     const { token } = res.locals.user
     const { nomsId } = req.params
 
-    const relevantRemand = (await this.warrantFolderService.calculateRelevantRemand(nomsId, token)).finalRemand
+    const relevantRemand = (await this.warrantFolderService.calculateRelevantRemand(nomsId, token)).sentenceRemand
     const adjustment: PrisonApiAdjustment = {
       from: relevantRemand[0].from,
       to: relevantRemand[0].to,
       type: 'REMAND',
       days: relevantRemand[0].days,
-      sequence: relevantRemand[0].sentence,
+      sequence: relevantRemand[0].charge.sentenceSequence,
     }
 
-    await this.prisonerService.createAdjustment(relevantRemand[0].bookingId, adjustment, token)
+    await this.prisonerService.createAdjustment(relevantRemand[0].charge.bookingId, adjustment, token)
 
     return res.redirect(`/remand/${nomsId}`)
   }

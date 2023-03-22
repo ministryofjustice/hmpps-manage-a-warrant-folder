@@ -23,7 +23,7 @@
                         <caption class="govuk-table__caption govuk-table__caption--m">Calculated remand days summary</caption>
 
                         <tbody class="govuk-table__body">
-                            {% for remand in model.relevantRemand.finalRemand %}
+                            {% for remand in model.relevantRemand.sentenceRemand %}
                                 <tr class="govuk-table__row">
                                     <th scope="row" class="govuk-table__header">From</th>
                                     <td class="govuk-table__cell">{{remand.from | date('dddd, DD MMMM YYYY') }}</td>
@@ -38,7 +38,7 @@
                                 </tr>
                                 <tr class="govuk-table__row">
                                     <th scope="row" class="govuk-table__header">Applies to</th>
-                                    <td class="govuk-table__cell">Abstract water without a licence</td>
+                                    <td class="govuk-table__cell">{{remand.charge.offence.description}}</td>
                                 </tr>
                             {% endfor %}
                         </tbody>
@@ -56,21 +56,19 @@
                     </tr>
                 </thead>
                 <tbody class="govuk-table__body">
-                    {% for remand in model.relevantRemand.remandPeriods %}
+                    {% for remand in model.relevantRemand.chargeRemand %}
 
                         <tr class="govuk-table__row">
                             <!-- Dates -->
                             <td class="govuk-table__cell">
                                 <span class="govuk-!-padding-top-3">
-                                    <b>Court case number {{remand.courtCaseRef}}</b>
+                                    <b>Court case number {{remand.charge.courtCaseRef}}</b>
                                 </span><br>
-                                <span>Court : Wolverhampton crown court</span><br>
-                                <span>Case outcome : Bailed</span><br>
+                                <span>Court : {{remand.charge.courtLocation}}</span><br>
+                                <span>Case outcome : {{remand.charge.resultDescription}}</span><br>
                                 <span class="govuk-hint">{{remand.from | date('dddd, DD MMMM YYYY') }} - {{remand.to | date('dddd, DD MMMM YYYY') }}</span><br>
                                 <ul class="govuk-list">
-                                    <li>{{remand.offenceDescription}}</li>
-                                    <!--                                <li>Possess a firearm without a certificate on 1 Feb 2018</li>-->
-                                    <!--                                <li>Possess knife blade or sharp pointed article on 1 Feb 2018</li>-->
+                                    <li>{{remand.charge.offence.description}}</li>
                                 </ul>
                             </td>
                             <!-- Days -->

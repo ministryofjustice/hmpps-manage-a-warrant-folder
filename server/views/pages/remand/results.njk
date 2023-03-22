@@ -4,45 +4,45 @@
 {% set mainClasses = "app-container govuk-body" %}
 
 {% block content %}
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
-            <h1 class="govuk-heading-xl">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">
                 Relevant remand calculation
             </h1>
-        </div>
     </div>
+  </div>
 
-    <div class="govuk-grid-column-two-thirds">
-        <h1 class="govuk-heading-l">Adjustments</h1>
-        <h3 class="govuk-heading-m">Remand</h3>
-        <p>The adjustments have been calculated based on the information in NOMIS.
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">Adjustments</h1>
+    <h3 class="govuk-heading-m">Remand</h3>
+    <p>The adjustments have been calculated based on the information in NOMIS.
                     The rules for applying remand time can be found in <a href="#">the policy framework</a>.</p>
-        <table class="govuk-table govuk-!-margin-bottom-8">
-            <thead class="govuk-table__head">
-                <tr class="govuk-table__row">
-                    <th class="govuk-table__header" scope="col">Details</th>
-                    <th class="govuk-table__header" scope="col">Days</th>
-                </tr>
-            </thead>
-            <tbody class="govuk-table__body">
+    <table class="govuk-table govuk-!-margin-bottom-8">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="col">Details</th>
+          <th class="govuk-table__header" scope="col">Days</th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
 
-                {% for remand in model.relevantRemand.remandPeriods %}
-                    <tr class="govuk-table__row">
-                        <!-- Dates -->
-                        <td class="govuk-table__cell">
-                            <span class="govuk-hint">Case reference: {{remand.courtCaseRef}}</span><br>
-                            {{remand.offenceDescription}}<br>
-                            <span class="govuk-!-padding-top-3">
-                                <b>From {{remand.from | date('dddd, DD MMMM YYYY') }} to {{remand.to | date('dddd, DD MMMM YYYY') }}</b>
-                            </span>
-                        </td>
-                        <!-- Days -->
-                        <td class="govuk-table__cell"><br>{{remand.days}}</td>
+        {% for remand in model.relevantRemand.chargeRemand %}
+          <tr class="govuk-table__row">
+            <!-- Dates -->
+            <td class="govuk-table__cell">
+              <span class="govuk-hint">Case reference: {{remand.charge.courtCaseRef}}</span><br>
+              {{remand.charge.offence.description}}<br>
+              <span class="govuk-!-padding-top-3">
+                <b>From {{remand.from | date('dddd, DD MMMM YYYY') }} to {{remand.to | date('dddd, DD MMMM YYYY') }}</b>
+              </span>
+            </td>
+            <!-- Days -->
+            <td class="govuk-table__cell"><br>{{remand.days}}</td>
 
-                    </tr>
-                {% endfor %}
+          </tr>
+        {% endfor %}
 
-                {# <!-- Total -->
+        {# <!-- Total -->
                 <tr class="govuk-table__row">
                     <!-- Dates -->
                     <td class="govuk-table__cell govuk-!-font-weight-bold govuk-!-text-align-right">Total days</td>
@@ -51,68 +51,68 @@
                         </td>
                     <td class="govuk-table__cell"></td>
                 </tr> #}
-            </tbody>
-        </table>
-    </div>
+      </tbody>
+    </table>
+  </div>
 
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-full">
-            <h2 class="govuk-heading-m">Calculated dates</h2>
-            {% if model.relevantRemand.finalRemand.length %}
-                <p class="govuk-body">These are the relevant remand dates we have calculated.</p>
-                {% for remand in model.relevantRemand.finalRemand %}
-                    <dl class="govuk-summary-list">
-                        <div class="govuk-summary-list__row">
-                            <dt class="govuk-summary-list__key">Dates</dt>
-                            <dd class="govuk-summary-list__value">From {{remand.from | date('dddd, DD MMMM YYYY') }} to {{remand.to | date('dddd, DD MMMM YYYY') }}</dd>
-                        </div>
-                        <div class="govuk-summary-list__row">
-                            <dt class="govuk-summary-list__key">Days</dt>
-                            <dd class="govuk-summary-list__value">{{remand.days}}</dd>
-                        </div>
-                        <div class="govuk-summary-list__row">
-                            <dt class="govuk-summary-list__key">Applies to sentence</dt>
-                            <dd class="govuk-summary-list__value">Booking ID: {{remand.bookingId}}, Sequence: {{remand.sentence}}</dd>
-                        </div>
-                    </dl>
-                {% endfor %}
-            {% else %}
-                <p class=govuk-body>No remand was calculated.</p>
-            {% endif %}
-
-            {% if not model.nomisRemand.length and model.relevantRemand.finalRemand.length %}
-                <form class="form" method="post">
-                    <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-                    <div>
-                        <button class="govuk-button" data-module="govuk-button" name="submit">Confirm remand to NOMIS</button>
-                    </div>
-                </form>
-            {% endif %}
-        </div>
-    </div>
-
-    {% if model.nomisRemand.length %}
-        <div class="govuk-grid-row govuk-!-margin-top-8">
-            <div class="govuk-grid-column-full">
-                <h2 class="govuk-heading-m">Nomis dates</h2>
-                <p class="govuk-body">If these dates are incorrect, remove them in NOMIS and then you can submit new dates from our service</p>
-                {% for remand in model.nomisRemand %}
-                    <dl class="govuk-summary-list">
-                        <div class="govuk-summary-list__row">
-                            <dt class="govuk-summary-list__key">Dates</dt>
-                            <dd class="govuk-summary-list__value">From {{remand.fromDate | date('dddd, DD MMMM YYYY') }} to {{remand.toDate | date('dddd, DD MMMM YYYY') }}</dd>
-                        </div>
-                        <div class="govuk-summary-list__row">
-                            <dt class="govuk-summary-list__key">Days</dt>
-                            <dd class="govuk-summary-list__value">{{remand.numberOfDays}}</dd>
-                        </div>
-                        <div class="govuk-summary-list__row">
-                            <dt class="govuk-summary-list__key">Applies to sentence</dt>
-                            <dd class="govuk-summary-list__value">Booking ID: {{remand.bookingId}}, Sequence: {{remand.sentenceSequence}}</dd>
-                        </div>
-                    </dl>
-                {% endfor %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <h2 class="govuk-heading-m">Calculated dates</h2>
+      {% if model.relevantRemand.sentenceRemand.length %}
+        <p class="govuk-body">These are the relevant remand dates we have calculated.</p>
+        {% for remand in model.relevantRemand.sentenceRemand %}
+          <dl class="govuk-summary-list">
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Dates</dt>
+              <dd class="govuk-summary-list__value">From {{remand.from | date('dddd, DD MMMM YYYY') }} to {{remand.to | date('dddd, DD MMMM YYYY') }}</dd>
             </div>
-        </div>
-    {% endif %}
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Days</dt>
+              <dd class="govuk-summary-list__value">{{remand.days}}</dd>
+            </div>
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Applies to sentence</dt>
+              <dd class="govuk-summary-list__value">Booking ID: {{remand.charge.bookingId}}, Sequence: {{remand.charge.sentenceSequence}}</dd>
+            </div>
+          </dl>
+        {% endfor %}
+      {% else %}
+        <p class=govuk-body>No remand was calculated.</p>
+      {% endif %}
+
+      {% if not model.nomisRemand.length and model.relevantRemand.sentenceRemand.length %}
+        <form class="form" method="post">
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+          <div>
+            <button class="govuk-button" data-module="govuk-button" name="submit">Confirm remand to NOMIS</button>
+          </div>
+        </form>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if model.nomisRemand.length %}
+    <div class="govuk-grid-row govuk-!-margin-top-8">
+      <div class="govuk-grid-column-full">
+        <h2 class="govuk-heading-m">Nomis dates</h2>
+        <p class="govuk-body">If these dates are incorrect, remove them in NOMIS and then you can submit new dates from our service</p>
+        {% for remand in model.nomisRemand %}
+          <dl class="govuk-summary-list">
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Dates</dt>
+              <dd class="govuk-summary-list__value">From {{remand.fromDate | date('dddd, DD MMMM YYYY') }} to {{remand.toDate | date('dddd, DD MMMM YYYY') }}</dd>
+            </div>
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Days</dt>
+              <dd class="govuk-summary-list__value">{{remand.numberOfDays}}</dd>
+            </div>
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Applies to sentence</dt>
+              <dd class="govuk-summary-list__value">Booking ID: {{remand.bookingId}}, Sequence: {{remand.sentenceSequence}}</dd>
+            </div>
+          </dl>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
 {% endblock %}
