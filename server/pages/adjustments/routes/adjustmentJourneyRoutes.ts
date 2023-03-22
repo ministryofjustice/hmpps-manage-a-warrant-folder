@@ -53,7 +53,6 @@ export default class AdjustmentJourneyRoutes {
     const { nomsId } = req.params
     const prisonerDetail = await this.prisonerService.getPrisonerDetail(nomsId, caseloads, token)
     const relevantRemand = await this.warrantFolderService.calculateRelevantRemand(nomsId, token)
-    console.log(JSON.stringify(relevantRemand, null, 2))
     return res.render('pages/adjustments/remand', {
       model: {
         prisonerDetail,
