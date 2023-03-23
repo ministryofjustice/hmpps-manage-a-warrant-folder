@@ -8,12 +8,12 @@
         <div class="govuk-grid-column-two-thirds">
 
             <h1 class="govuk-heading-l">
-                <span class="govuk-caption-xl">Adjustments</span>Check remand details for {{model.prisonerDetail.firstName}}
-                {{model.prisonerDetail.lastName}}</h1>
+                <span class="govuk-caption-xl">Adjustments</span>Check remand details for {{model.prisonerDetail.firstName | title}}
+                {{model.prisonerDetail.lastName | title}}</h1>
 
             <p class="govuk-!-margin-bottom-8">Based on the court case information in NOMIS, the following remand has been counted as relevant remand.
 
-                    The rules for applying remand time can be found in <a href="#">the policy framework</a>.</p>
+                    The rules for applying remand time can be found in the <a href="#">policy framework</a>.</p>
 
             <article class="moj-ticket-panel govuk-!-margin-bottom-8" aria-label="Sub navigation 1">
 
@@ -26,17 +26,17 @@
                             {% for remand in model.relevantRemand.sentenceRemand %}
                                 <tr class="govuk-table__row">
                                     <th scope="row" class="govuk-table__header">From</th>
-                                    <td class="govuk-table__cell">{{remand.from | date('dddd, DD MMMM YYYY') }}</td>
+                                    <td class="govuk-table__cell">{{remand.from | date('DD MMMM YYYY') }}</td>
                                 </tr>
                                 <tr class="govuk-table__row">
                                     <th scope="row" class="govuk-table__header">To</th>
-                                    <td class="govuk-table__cell">{{remand.to | date('dddd, DD MMMM YYYY') }}</td>
+                                    <td class="govuk-table__cell">{{remand.to | date('DD MMMM YYYY') }}</td>
                                 </tr>
                                 <tr class="govuk-table__row">
                                     <th scope="row" class="govuk-table__header">Days</th>
                                     <td class="govuk-table__cell">{{remand.days}}</td>
                                 </tr>
-                                <tr class="govuk-table__row">
+                                <tr class="govuk-table__row {%if not loop.last %}table-thick-bottom-border{%endif%}">
                                     <th scope="row" class="govuk-table__header">Applies to</th>
                                     <td class="govuk-table__cell">{{remand.charge.offence.description}}</td>
                                 </tr>
@@ -62,11 +62,11 @@
                             <!-- Dates -->
                             <td class="govuk-table__cell">
                                 <span class="govuk-!-padding-top-3">
-                                    <b>Court case number {{remand.charge.courtCaseRef}}</b>
+                                    <b>Court case number: {{remand.charge.courtCaseRef}}</b>
                                 </span><br>
-                                <span>Court : {{remand.charge.courtLocation}}</span><br>
-                                <span>Case outcome : {{remand.charge.resultDescription}}</span><br>
-                                <span class="govuk-hint">{{remand.from | date('dddd, DD MMMM YYYY') }} - {{remand.to | date('dddd, DD MMMM YYYY') }}</span><br>
+                                <span>Court: {{remand.charge.courtLocation}}</span><br>
+                                <span>Case outcome: {{remand.charge.resultDescription}}</span><br>
+                                <span class="govuk-hint">From {{remand.from | date('DD MMMM YYYY') }} - {{remand.to | date('DD MMMM YYYY') }}</span><br>
                                 <ul class="govuk-list">
                                     <li>{{remand.charge.offence.description}}</li>
                                 </ul>
@@ -89,7 +89,6 @@
                 <a href="/adjustments/{{model.prisonerDetail.offenderNo}}/list" class="govuk-button govuk-button--secondary" data-module="govuk-button">
                     Cancel
                 </a>
-
             </div>
         </form>
     </div>

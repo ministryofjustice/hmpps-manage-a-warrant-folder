@@ -15,9 +15,10 @@
                     </div>
                     <div class="govuk-notification-banner__content">
                         <h3 class="govuk-notification-banner__heading">
-                            {{model.message.days}} days of {{model.message.type.text.toLowerCase()}} have been applied
+                            {{model.message.days}} days of {{model.message.type.shortText}} have been applied
                             </h3>
-                        <p class="govuk-body">The adjustments have been saved in NOMIS. You can continue to add adjustments for Joe Bloggs.</p>
+                        <p class="govuk-body">The adjustments have been saved in NOMIS. You can continue to add adjustments for {{model.prisonerDetail.firstName | title}}
+                            {{model.prisonerDetail.lastName | title}}.</p>
                         <p class="govuk-body">You must recalculate the release dates once all adjustments have been applied.
                                 <a href="{{model.calculateReleaseDatesUrl()}}" class="govuk-notification-banner__link">Calculate release date</a>
                         </p>
@@ -34,7 +35,9 @@
             </div>
 
             <p class="govuk-body">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                        This page lists all the adjustments that have been recorded for {{model.prisonerDetail.firstName | title}}
+                {{model.prisonerDetail.lastName | title}}.
+                        You can add new adjustments or review remand time that has been identified from court outcomes logged in NOMIS.
                     </p>
         </div>
     </div>
@@ -55,7 +58,10 @@
                             <span>Days</span>
                             <ul class="govuk-list govuk-!-padding-top-3">
                                 <li>
-                                    <a href="/adjustments/{{model.prisonerDetail.offenderNo}}/{{adjustmentType.url}}">Add new{% if model.displayReview(adjustmentType) %}({{model.getTotalDaysRelevantRemand()}} days for review){% endif %}
+                                    <a href="/adjustments/{{model.prisonerDetail.offenderNo}}/{{adjustmentType.url}}">
+                                        {% if model.displayReview(adjustmentType) %}Review remand ({{model.getTotalDaysRelevantRemand()}} days)
+                                                {% else %}Add {{adjustmentType.shortText}}
+                                        {% endif %}
                                     </a>
                                 </li>
                             </ul>
