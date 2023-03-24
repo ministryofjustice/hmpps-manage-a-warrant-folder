@@ -1,6 +1,5 @@
 import { RequestHandler } from 'express'
 import { AdjustmentDetails } from '../../../@types/adjustments/adjustmentsTypes'
-import { PrisonApiAdjustment } from '../../../@types/prisonApi/prisonClientTypes'
 import AdjustmentsService from '../../../services/adjustmentsService'
 import PrisonerService from '../../../services/prisonerService'
 import WarrantFolderService from '../../../services/warrantFolderService'
@@ -65,21 +64,6 @@ export default class AdjustmentJourneyRoutes {
     const { token } = res.locals.user
     const { nomsId } = req.params
     const relevantRemand = await this.warrantFolderService.calculateRelevantRemand(nomsId, token)
-
-    const nomisAdjustments: PrisonApiAdjustment[] = relevantRemand.sentenceRemand.map(it => {
-      return {
-        from: it.from,
-        to: it.to,
-        type: 'REMAND',
-        days: it.days,
-        sequence: it.charge.sentenceSequence,
-      }
-    })
-    await Promise.all(
-      nomisAdjustments.map(it =>
-        this.prisonerService.createAdjustment(relevantRemand.sentenceRemand[0].charge.bookingId, it, token)
-      )
-    )
 
     const adjustments: AdjustmentDetails[] = relevantRemand.sentenceRemand.map(it => {
       return {
