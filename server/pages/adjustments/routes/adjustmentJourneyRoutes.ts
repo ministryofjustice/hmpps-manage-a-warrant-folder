@@ -1,6 +1,5 @@
 import { RequestHandler } from 'express'
 import { AdjustmentDetails } from '../../../@types/adjustments/adjustmentsTypes'
-import { PrisonApiAdjustment } from '../../../@types/prisonApi/prisonClientTypes'
 import AdjustmentsService from '../../../services/adjustmentsService'
 import PrisonerService from '../../../services/prisonerService'
 import WarrantFolderService from '../../../services/warrantFolderService'
