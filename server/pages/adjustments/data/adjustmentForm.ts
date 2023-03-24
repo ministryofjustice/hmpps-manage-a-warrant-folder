@@ -73,8 +73,8 @@ export default class AdjustmentForm {
           .set('year', Number(this['to-year']))
           .format('YYYY-MM-DD'),
       person: nomsId,
-      days: Number(this.days),
-      sentenceSequence: Number(this.sentence),
+      days: this.days ? Number(this.days) : null,
+      sentenceSequence: this.sentence ? Number(this.sentence) : null,
     }
   }
 }

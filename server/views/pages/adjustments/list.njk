@@ -5,7 +5,7 @@
 
 {% block content %}
     <div class="govuk-grid-row">
-        <div class="govuk-grid-column-full govuk-!-padding-6">
+        <div class="govuk-grid-column-full">
             {% if model.message %}
                 <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
                     <div class="govuk-notification-banner__header">
@@ -69,31 +69,42 @@
                     </div>
                 {% endfor %}
             </div>
-        </div>
-        <div class="govuk-grid-row govuk-!-padding-top-8">
-            <div class="govuk-grid-column-full">
-                <h2 class="govuk-heading-m govuk-!-padding-left-4">
+
+            <h2 class="govuk-heading-m govuk-!-padding-left-4">
                         Additions
                     </h2>
-                <div class="adjustment-card-container govuk-body">
-                    {% for adjustmentType in model.additions()%}
-                        <div class="adjustment-card">
-                            <div class="adjustment-card_heading ">
-                                <h2 class="govuk-heading-s adj-card-heading govuk-!-margin-bottom-0">{{adjustmentType.text}}</h2>
-                            </div>
-                            <div class="adjustment-card_content">
-                                <span class="count govuk-body">{{model.getTotalDays(adjustmentType)}}</span>
-                                <span>Days</span>
-                                <ul class="govuk-list govuk-!-padding-top-3">
-                                    <li>
-                                        <a href="/adjustments/{{model.prisonerDetail.offenderNo}}/{{adjustmentType.url}}">Add new{% if adjustmentType.value == 'REMAND' %}({{model.getTotalDaysRelevantRemand()}} days for review){% endif %}
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
+            <div class="adjustment-card-container govuk-body">
+                {% for adjustmentType in model.additions()%}
+                    <div class="adjustment-card">
+                        <div class="adjustment-card_heading ">
+                            <h2 class="govuk-heading-s adj-card-heading govuk-!-margin-bottom-0">{{adjustmentType.text}}</h2>
                         </div>
-                    {% endfor %}
-                </div>
+                        <div class="adjustment-card_content">
+                            <span class="count govuk-body">{{model.getTotalDays(adjustmentType)}}</span>
+                            <span>Days</span>
+                            <ul class="govuk-list govuk-!-padding-top-3">
+                                <li>
+                                    <a href="/adjustments/{{model.prisonerDetail.offenderNo}}/{{adjustmentType.url}}">
+                                        {% if model.displayReview(adjustmentType) %}Review remand ({{model.getTotalDaysRelevantRemand()}} days)
+                                                {% else %}Add {{adjustmentType.shortText}}
+                                        {% endif %}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
         </div>
-    {% endblock %}
+    </div>
+
+    <div class="govuk-inset-text govuk-!-margin-left-2 govuk-!-margin-top-9">
+        <h2 class="govuk-heading-m">Calculate release dates</h2>
+        <p>The changes may affect the release date for {{model.prisonerDetail.firstName | title}}
+            {{model.prisonerDetail.lastName | title}}
+        </p>
+        <a href="{{model.calculateReleaseDatesUrl()}}" class="govuk-button">
+                                Calculate release dates
+                            </a>
+    </div>
+{% endblock %}

@@ -13,7 +13,7 @@
 
             <p class="govuk-!-margin-bottom-8">Based on the court case information in NOMIS, the following remand has been counted as relevant remand.
 
-                    The rules for applying remand time can be found in the <a href="#">policy framework</a>.</p>
+                    The rules for applying remand time can be found in the <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1083190/sc-annex-a-operational-guidance.pdf#page=72">policy framework</a>.</p>
 
             <article class="moj-ticket-panel govuk-!-margin-bottom-8" aria-label="Sub navigation 1">
 
@@ -68,7 +68,15 @@
                                 <span>Case outcome: {{remand.charge.resultDescription}}</span><br>
                                 <span class="govuk-hint">From {{remand.from | date('DD MMMM YYYY') }} - {{remand.to | date('DD MMMM YYYY') }}</span><br>
                                 <ul class="govuk-list">
-                                    <li>{{remand.charge.offence.description}}</li>
+                                    <li>{{remand.charge.offence.description}}<br>
+                                        <span class="govuk-hint">
+                                            {% if (remand.charge.offenceDate and remand.charge.offenceStartDate and remand.charge.offenceEndDate !== remand.charge.offenceDate) %}
+                        Committed from {{ remand.charge.offenceDate | date('DD MMMM YYYY') }} to {{ emand.charge.offenceEndDate | date('DD MMMM YYYY') }}
+                                            {% elseif remand.charge.offenceDate %}
+                        Committed on {{ remand.charge.offenceDate | date('DD MMMM YYYY') }}
+                                            {% endif %}
+                                        </span>
+                                    </li>
                                 </ul>
                             </td>
                             <!-- Days -->
@@ -80,12 +88,10 @@
 
             </tbody>
         </table>
-        <div></div>
-
         <form class="form" method="post">
             <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
             <div>
-                <button class="govuk-button" data-module="govuk-button" name="submit">Accept and save</button>
+                <button class="govuk-button" data-module="govuk-button" name="submit">Confirm and submit</button>
                 <a href="/adjustments/{{model.prisonerDetail.offenderNo}}/list" class="govuk-button govuk-button--secondary" data-module="govuk-button">
                     Cancel
                 </a>
