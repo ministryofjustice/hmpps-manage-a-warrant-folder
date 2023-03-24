@@ -66,21 +66,6 @@ export default class AdjustmentJourneyRoutes {
     const { nomsId } = req.params
     const relevantRemand = await this.warrantFolderService.calculateRelevantRemand(nomsId, token)
 
-    const nomisAdjustments: PrisonApiAdjustment[] = relevantRemand.sentenceRemand.map(it => {
-      return {
-        from: it.from,
-        to: it.to,
-        type: 'REMAND',
-        days: it.days,
-        sequence: it.charge.sentenceSequence,
-      }
-    })
-    await Promise.all(
-      nomisAdjustments.map(it =>
-        this.prisonerService.createAdjustment(relevantRemand.sentenceRemand[0].charge.bookingId, it, token)
-      )
-    )
-
     const adjustments: AdjustmentDetails[] = relevantRemand.sentenceRemand.map(it => {
       return {
         fromDate: it.from,
