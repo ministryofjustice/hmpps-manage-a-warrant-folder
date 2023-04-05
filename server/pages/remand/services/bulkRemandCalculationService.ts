@@ -151,6 +151,9 @@ export default class BulkRemandCalculationService {
             days: it.numberOfDays,
             from: it.fromDate,
             to: it.toDate,
+            charge: {
+              bookingId,
+            },
           } as Remand
         })
       : []
