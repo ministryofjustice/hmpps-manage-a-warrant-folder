@@ -5,6 +5,7 @@ import PrisonerService from '../../../services/prisonerService'
 import WarrantFolderService from '../../../services/warrantFolderService'
 import AdjustmentsListViewModel, { Message } from '../data/adjustmentsListModel'
 import adjustmentTypes from '../data/adjustmentTypes'
+import RelevantRemandModel from '../data/relevantRemandModel'
 
 export default class AdjustmentJourneyRoutes {
   constructor(
@@ -53,10 +54,7 @@ export default class AdjustmentJourneyRoutes {
     const prisonerDetail = await this.prisonerService.getPrisonerDetail(nomsId, caseloads, token)
     const relevantRemand = await this.warrantFolderService.calculateRelevantRemand(nomsId, token)
     return res.render('pages/adjustments/remand', {
-      model: {
-        prisonerDetail,
-        relevantRemand,
-      },
+      model: new RelevantRemandModel(prisonerDetail, relevantRemand),
     })
   }
 

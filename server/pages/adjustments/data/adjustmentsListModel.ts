@@ -35,8 +35,8 @@ export default class AdjustmentsListViewModel {
     return this.adjustmentTypes.filter(it => ['UNLAWFULLY_AT_LARGE', 'ADDITIONAL_DAYS_AWARDED'].includes(it.value))
   }
 
-  public displayReview(adjustmentType: AdjustmentType) {
-    return adjustmentType.value === 'REMAND' && this.getTotalDays(adjustmentType) !== this.getTotalDaysRelevantRemand()
+  public displayReview() {
+    return this.getTotalDays(adjustmentTypes.find(it => it.value === 'REMAND')) !== this.getTotalDaysRelevantRemand()
   }
 
   public getTotalDays(adjustmentType: AdjustmentType) {

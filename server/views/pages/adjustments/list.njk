@@ -44,6 +44,13 @@
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
+            {% if model.displayReview() %}
+                <div class="custom-card">
+                    <h2 class="govuk-heading-m adj-card-heading">There is existing remand to review</h2>
+                    <p>Based on the data from court outcomes in NOMIS, Joe Bloggs may have {{model.getTotalDaysRelevantRemand()}} days remand. Review the remand to make sure it is relevant.</p>
+                    <a href="/adjustments/{{model.prisonerDetail.offenderNo}}/remand" class="govuk-button" role="button">Review</a>
+                </div>
+            {% endif %}
             <h2 class="govuk-heading-m govuk-!-padding-left-4">
                         Deductions
                     </h2>
@@ -59,8 +66,8 @@
                             <ul class="govuk-list govuk-!-padding-top-3">
                                 <li>
                                     <a href="/adjustments/{{model.prisonerDetail.offenderNo}}/{{adjustmentType.url}}">
-                                        {% if model.displayReview(adjustmentType) %}Review remand ({{model.getTotalDaysRelevantRemand()}} days)
-                                                {% else %}Add {{adjustmentType.shortText}}
+                                        {% if adjustmentType.value != 'REMAND' %}
+                                            Add {{adjustmentType.shortText}}
                                         {% endif %}
                                     </a>
                                 </li>
