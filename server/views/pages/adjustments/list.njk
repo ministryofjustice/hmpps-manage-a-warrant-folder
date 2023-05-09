@@ -92,9 +92,7 @@
                             <ul class="govuk-list govuk-!-padding-top-3">
                                 <li>
                                     <a href="/adjustments/{{model.prisonerDetail.offenderNo}}/{{adjustmentType.url}}">
-                                        {% if model.displayReview(adjustmentType) %}Review remand ({{model.getTotalDaysRelevantRemand()}} days)
-                                                {% else %}Add {{adjustmentType.shortText}}
-                                        {% endif %}
+                                        Add {{adjustmentType.shortText}}
                                     </a>
                                 </li>
                             </ul>
